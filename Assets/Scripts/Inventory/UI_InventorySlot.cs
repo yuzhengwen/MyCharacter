@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class UI_InventorySlot : MonoBehaviour
+public class UI_InventorySlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     private InventoryItem item;
     private ItemData itemData;
@@ -17,9 +17,14 @@ public class UI_InventorySlot : MonoBehaviour
     private TextMeshProUGUI stackSizeDisplay;
     private TextMeshProUGUI labelDisplay;
 
+    private Image slotImage;
+    private Color defaultColor;
+
     public void Start()
     {
         icon = uiInventoryItem.transform.Find("Icon").GetComponent<Image>();
+        slotImage = GetComponent<Image>();
+        defaultColor = slotImage.color;
         stackSizeDisplay = uiInventoryItem.transform.Find("StackSize").GetComponent<TextMeshProUGUI>();
         labelDisplay = uiInventoryItem.transform.Find("Label").GetComponent<TextMeshProUGUI>();
         ClearSlot();
@@ -71,5 +76,15 @@ public class UI_InventorySlot : MonoBehaviour
     public bool IsOccupied()
     {
         return uiInventoryItem.activeSelf;
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        slotImage.color = new Color(255, 255, 255, 0.8f);
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        slotImage.color = defaultColor;
     }
 }

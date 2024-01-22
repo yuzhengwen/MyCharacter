@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class UI_InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
+public class UI_InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler
 {
     private Transform slotParentTransform;
     private UI_InventorySlot slotParent;
@@ -75,5 +75,14 @@ public class UI_InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, 
                 return newSlot;
         }
         return null;
+    }
+
+    // TODO add cursor icon change
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
     }
 }
