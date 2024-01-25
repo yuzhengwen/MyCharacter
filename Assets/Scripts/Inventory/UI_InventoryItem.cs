@@ -1,10 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using Unity.VisualScripting.ReorderableList;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.UI;
 
 public class UI_InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler
 {
