@@ -5,9 +5,9 @@ using UnityEngine;
 
 public class Coin : MonoBehaviour, ICollectible {
 
-    public static event Action<ItemData> OnCoinCollected;
+    public static event Action<ItemDataSO> OnCoinCollected;
 
-    public ItemData itemData;
+    public ItemDataSO itemData;
 
     public void Collect()
     {

@@ -9,10 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 38a7346ecd4647e41a80e2eca0d3aba4, type: 3}
+  m_Script: {fileID: 11500000, guid: b65aa398a1d078f4bb5f5d89a53591be, type: 3}
   m_Name: CrystalData
   m_EditorClassIdentifier: 
   displayName: Crystal
   sprite: {fileID: 700589333, guid: 6e1f34d7c10cd464581ee0486b528bdb, type: 3}
   id: 1
-  maxStackSize: 5
+  maxStackSize: 1

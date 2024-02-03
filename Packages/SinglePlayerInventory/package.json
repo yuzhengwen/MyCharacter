@@ -1,0 +1,16 @@
+{
+  "name": "com.yuzhengwen.singleplayer_inventory",
+  "version": "1.0.0",
+  "displayName": "Singleplayer Inventory",
+  "unity": "2022.3",
+  "keywords": [
+    "Singleplayer",
+    "Inventory"
+  ],
+  "author": {
+    "name": "Yuzhengwen",
+    "email": "yuzhengwen0217@gmail.com",
+    "url": "https://www.yuzhengwen.github.com"
+  },
+  "description": "A basic singleplayer inventory with features such as:\n- Exposed interface for bulk adding/removing of items\n- drag and drop items around\n- allows setting max stack size for items\n\nContains Sample Scene and Game Objects\n- Can modify to look different\nComes with a simple Player and Item Collector system"
+}

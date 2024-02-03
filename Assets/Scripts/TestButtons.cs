@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class TestButtons : MonoBehaviour
@@ -9,7 +7,7 @@ public class TestButtons : MonoBehaviour
     [SerializeField]
     private UI_Inventory uiInventory;
     [SerializeField]
-    private ItemData itemData;
+    private ItemDataSO itemData;
     public void Add20Coins()
     {
         inventory.AddItem(itemData, 20);
@@ -32,6 +30,6 @@ public class TestButtons : MonoBehaviour
     }
     public void FillSpace()
     {
-        uiInventory.FillSpace(inventory.GetItems());
+        inventory.FillSpace();
     }
 }

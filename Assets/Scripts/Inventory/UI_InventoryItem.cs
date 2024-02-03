@@ -5,8 +5,7 @@ public class UI_InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, 
 {
     private Transform slotParentTransform;
     private UI_InventorySlot slotParent;
-    [SerializeField]
-    private Transform canvas;
+    [SerializeField] private Transform canvas;
 
     // Start is called before the first frame update
     void Start()
@@ -32,31 +31,27 @@ public class UI_InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, 
         UI_InventorySlot newSlot = CheckForValidSlot();
         if (newSlot)
         {
-            InventoryItem itemMoved = slotParent.GetItem();
+            InventorySlot item1 = slotParent.GetItem(); // item being dragged
+            InventorySlot item2 = newSlot.GetItem(); // item being dragged onto
+
             // if item is of the same type, stack them if possible
-            if (newSlot.IsOccupied() && newSlot.GetItem() == slotParent.GetItem())
+            if (item2.IsOccupied() && item1 == item2)
             {
-                if (newSlot.GetItem().stackSize + slotParent.GetItem().stackSize <= newSlot.GetItem().itemData.maxStackSize)
+                if (item2.stackSize + item1.stackSize <= item2.itemData.maxStackSize)
                 {
-                    newSlot.GetItem().AddToStack(slotParent.GetItem().stackSize);
-                    slotParent.ClearSlot();
+                    item2.AddToStack(slotParent.GetItem().stackSize);
+                    item1.ClearSlot();
                 }
                 else
                 {
-                    int amountToMove = newSlot.GetItem().itemData.maxStackSize - newSlot.GetItem().stackSize;
-                    newSlot.GetItem().AddToStack(amountToMove);
-                    slotParent.GetItem().RemoveFromStack(amountToMove);
+                    int amountToMove = item2.itemData.maxStackSize - item2.stackSize;
+                    item2.AddToStack(amountToMove);
+                    item1.RemoveFromStack(amountToMove);
                 }
             }
             else
-            {
-                // swap items between the prev and new slot (if any)
-                slotParent.ClearSlot();
-                if (newSlot.IsOccupied())
-                    slotParent.SetItem(newSlot.GetItem());
-                newSlot.SetItem(itemMoved);
-            }
-        }  
+                item1.Swap(item2);
+        }
     }
     private UI_InventorySlot CheckForValidSlot()
     {

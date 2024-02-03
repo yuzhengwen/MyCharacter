@@ -1,12 +1,15 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(Inventory))]
 public class Collector : MonoBehaviour
 {
-    [SerializeField]
     private Inventory inventory;
+    private void Start()
+    {
+        inventory = GetComponent<Inventory>();
+        FindObjectOfType<UI_Inventory>().AssignInventory(inventory);
+
+    }
     public void OnEnable()
     {
         Coin.OnCoinCollected += AddCollectibleToInventory;
@@ -18,7 +21,7 @@ public class Collector : MonoBehaviour
         Coin.OnCoinCollected -= AddCollectibleToInventory;
         Crystal.OnCrystalCollected -= AddCollectibleToInventory;
     }
-    private void AddCollectibleToInventory(ItemData data)
+    private void AddCollectibleToInventory(ItemDataSO data)
     {
         inventory.AddItem(data, 1);
     }

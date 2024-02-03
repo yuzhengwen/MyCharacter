@@ -6,9 +6,9 @@ using UnityEngine;
 public class Crystal : MonoBehaviour, ICollectible
 {
 
-    public static event Action<ItemData> OnCrystalCollected;
+    public static event Action<ItemDataSO> OnCrystalCollected;
 
-    public ItemData itemData;
+    public ItemDataSO itemData;
 
     public void Collect()
     {

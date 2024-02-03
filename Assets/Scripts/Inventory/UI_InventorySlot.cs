@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -8,10 +5,8 @@ using UnityEngine.UI;
 
 public class UI_InventorySlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
-    private InventoryItem item;
-    private ItemData itemData;
+    private InventorySlot slot;
 
-    [SerializeField]
     private GameObject uiInventoryItem;
     private Image icon;
     private TextMeshProUGUI stackSizeDisplay;
@@ -20,64 +15,80 @@ public class UI_InventorySlot : MonoBehaviour, IPointerEnterHandler, IPointerExi
     private Image slotImage;
     private Color defaultColor;
 
-    public void Start()
+    private void Awake()
     {
-        icon = uiInventoryItem.transform.Find("Icon").GetComponent<Image>();
+        uiInventoryItem = transform.GetChild(0).gameObject;
+        ClearUISlot();
+
         slotImage = GetComponent<Image>();
         defaultColor = slotImage.color;
+
+        icon = uiInventoryItem.transform.Find("Icon").GetComponent<Image>();
         stackSizeDisplay = uiInventoryItem.transform.Find("StackSize").GetComponent<TextMeshProUGUI>();
         labelDisplay = uiInventoryItem.transform.Find("Label").GetComponent<TextMeshProUGUI>();
-        ClearSlot();
     }
-    public void ClearSlot()
+    /// <summary>
+    /// Assigns the inventory slot to be tracked by this UI slot
+    /// </summary>
+    /// <param name="slot"></param>
+    public void AssignSlot(InventorySlot slot)
     {
-        uiInventoryItem.SetActive(false);
-    }
-    public void SetItem(InventoryItem item)
-    {
-        // update listeners to listen to events from new item
-        if (this.item != null)
-            this.item.OnStackChanged -= UpdateStackSize;
-        item.OnStackChanged += UpdateStackSize;
-
-        this.item = item;
-        itemData = item.itemData;
-
-        icon.sprite = itemData.sprite;
-        stackSizeDisplay.text = item.stackSize.ToString();
-        labelDisplay.text = itemData.displayName;
-
-        uiInventoryItem.SetActive(true);
+        this.slot = slot;
+        slot.OnStackChanged += UpdateStackSize;
+        slot.OnItemChanged += UpdateItem;
+        slot.OnSlotCleared += ClearUISlot;
     }
     private void OnDisable()
     {
-        if (item != null)
+        if (slot != null)
         {
-            item.OnStackChanged -= UpdateStackSize;
+            slot.OnStackChanged -= UpdateStackSize;
+            slot.OnItemChanged -= UpdateItem;
+            slot.OnSlotCleared -= ClearUISlot;
         }
     }
-
-    private void UpdateStackSize(InventoryItem newItem)
+    // automatically called when inventory slot being tracked becomes empty
+    private void ClearUISlot()
     {
-        if (newItem.stackSize == 0)
+        uiInventoryItem.SetActive(false);
+    }
+
+    // automatically called when inventory slot being tracked changes item
+    private void UpdateItem(InventorySlot slot)
+    {
+        if (!slot.IsOccupied())
         {
-            ClearSlot();
+            ClearUISlot();
             return;
         }
-        this.item = newItem;
-        stackSizeDisplay.text = item.stackSize.ToString();
-    }
 
-    public InventoryItem GetItem()
+        icon.sprite = slot.itemData.sprite;
+        stackSizeDisplay.text = slot.stackSize.ToString();
+        labelDisplay.text = slot.itemData.displayName;
+
+        if (!uiInventoryItem.activeSelf) uiInventoryItem.SetActive(true);
+    }
+    // automatically called when inventory slot being tracked changes stack size
+    private void UpdateStackSize(int stackSize, int change)
     {
-        return item;
+        if (stackSize == 0)
+        {
+            ClearUISlot();
+            return;
+        }
+        stackSizeDisplay.text = stackSize.ToString();
     }
 
-    public bool IsOccupied()
+    /// <summary>
+    /// Returns the inventory slot being tracked
+    /// </summary>
+    /// <returns></returns>
+    public InventorySlot GetItem()
     {
-        return uiInventoryItem.activeSelf;
+        return slot;
     }
 
+    #region Mouse Hover effect
     public void OnPointerEnter(PointerEventData eventData)
     {
         slotImage.color = new Color(255, 255, 255, 0.8f);
@@ -87,4 +98,5 @@ public class UI_InventorySlot : MonoBehaviour, IPointerEnterHandler, IPointerExi
     {
         slotImage.color = defaultColor;
     }
+    #endregion
 }

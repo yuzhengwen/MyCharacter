@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 928f16ab80dd7f24fb33df1f3a7c7df6, type: 3}
   m_Name: StartingInventory
   m_EditorClassIdentifier: 
-  items:
-  - {fileID: 11400000, guid: 322ee00e8dc1452419f552da4762131b, type: 2}
-  - {fileID: 11400000, guid: 6e92e2c69338f954aaa5a0e989c3e3d9, type: 2}
-  amounts: 1d00000002000000
+  startingItems:
+  - itemData: {fileID: 11400000, guid: 322ee00e8dc1452419f552da4762131b, type: 2}
+    stackSize: 25
+  - itemData: {fileID: 11400000, guid: 6e92e2c69338f954aaa5a0e989c3e3d9, type: 2}
+    stackSize: 3
