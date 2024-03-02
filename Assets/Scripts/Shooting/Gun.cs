@@ -41,6 +41,5 @@ public class Gun : MonoBehaviour
         {
             trail.SetTarget(hit.point);
         }
-        Debug.Log("shoot");
     }
 }

@@ -1,78 +1,81 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class UI_InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler
+namespace InventorySystem
 {
-    private Transform slotParentTransform;
-    private UI_InventorySlot slotParent;
-    [SerializeField] private Transform canvas;
-
-    // Start is called before the first frame update
-    void Start()
+    public class UI_InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler
     {
-        slotParentTransform = transform.parent;
-        slotParent = slotParentTransform.GetComponent<UI_InventorySlot>();
-    }
-    public void OnBeginDrag(PointerEventData eventData)
-    {
-        transform.SetParent(canvas, true);
-        transform.SetAsLastSibling();
-    }
+        private Transform slotParentTransform;
+        private UI_InventorySlot slotParent;
+        [SerializeField] private Transform canvas;
 
-    public void OnDrag(PointerEventData eventData)
-    {
-        transform.position = eventData.position;
-    }
-
-    public void OnEndDrag(PointerEventData eventData)
-    {
-        transform.SetParent(slotParentTransform, true);
-
-        UI_InventorySlot newSlot = CheckForValidSlot();
-        if (newSlot)
+        // Start is called before the first frame update
+        void Start()
         {
-            InventorySlot item1 = slotParent.GetItem(); // item being dragged
-            InventorySlot item2 = newSlot.GetItem(); // item being dragged onto
+            slotParentTransform = transform.parent;
+            slotParent = slotParentTransform.GetComponent<UI_InventorySlot>();
+        }
+        public void OnBeginDrag(PointerEventData eventData)
+        {
+            transform.SetParent(canvas, true);
+            transform.SetAsLastSibling();
+        }
 
-            // if item is of the same type, stack them if possible
-            if (item2.IsOccupied() && item1 == item2)
+        public void OnDrag(PointerEventData eventData)
+        {
+            transform.position = eventData.position;
+        }
+
+        public void OnEndDrag(PointerEventData eventData)
+        {
+            transform.SetParent(slotParentTransform, true);
+
+            UI_InventorySlot newSlot = CheckForValidSlot();
+            if (newSlot)
             {
-                if (item2.stackSize + item1.stackSize <= item2.itemData.maxStackSize)
+                InventorySlot item1 = slotParent.GetItem(); // item being dragged
+                InventorySlot item2 = newSlot.GetItem(); // item being dragged onto
+
+                // if item is of the same type, stack them if possible
+                if (item2.IsOccupied() && item1 == item2)
                 {
-                    item2.AddToStack(slotParent.GetItem().stackSize);
-                    item1.ClearSlot();
+                    if (item2.stackSize + item1.stackSize <= item2.itemData.maxStackSize)
+                    {
+                        item2.AddToStack(slotParent.GetItem().stackSize);
+                        item1.ClearSlot();
+                    }
+                    else
+                    {
+                        int amountToMove = item2.itemData.maxStackSize - item2.stackSize;
+                        item2.AddToStack(amountToMove);
+                        item1.RemoveFromStack(amountToMove);
+                    }
                 }
                 else
-                {
-                    int amountToMove = item2.itemData.maxStackSize - item2.stackSize;
-                    item2.AddToStack(amountToMove);
-                    item1.RemoveFromStack(amountToMove);
-                }
+                    item1.Swap(item2);
             }
-            else
-                item1.Swap(item2);
         }
-    }
-    private UI_InventorySlot CheckForValidSlot()
-    {
-        RaycastHit2D[] hits;
-        hits = Physics2D.RaycastAll(transform.position, transform.forward, 100.0F);
-
-        foreach (RaycastHit2D hit in hits)
+        private UI_InventorySlot CheckForValidSlot()
         {
-            UI_InventorySlot newSlot = hit.collider.gameObject.GetComponent<UI_InventorySlot>();
-            if (newSlot != null && newSlot != slotParent)
-                return newSlot;
+            RaycastHit2D[] hits;
+            hits = Physics2D.RaycastAll(transform.position, transform.forward, 100.0F);
+
+            foreach (RaycastHit2D hit in hits)
+            {
+                UI_InventorySlot newSlot = hit.collider.gameObject.GetComponent<UI_InventorySlot>();
+                if (newSlot != null && newSlot != slotParent)
+                    return newSlot;
+            }
+            return null;
         }
-        return null;
-    }
 
-    // TODO add cursor icon change
-    public void OnPointerEnter(PointerEventData eventData)
-    {
-    }
+        // TODO add cursor icon change
+        public void OnPointerEnter(PointerEventData eventData)
+        {
+        }
 
-    public void OnPointerExit(PointerEventData eventData)
-    {
+        public void OnPointerExit(PointerEventData eventData)
+        {
+        }
     }
 }

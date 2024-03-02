@@ -1,3 +1,4 @@
+using InventorySystem;
 using UnityEngine;
 
 [RequireComponent(typeof(Inventory))]
