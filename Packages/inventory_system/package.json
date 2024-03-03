@@ -1,0 +1,15 @@
+{
+  "name": "com.yuzuval.inventory_system",
+  "version": "1.0.0",
+  "displayName": "Inventory System",
+  "unity": "2022.3",
+  "keywords": [
+    "Inventory"
+  ],
+  "author": {
+    "name": "Yuzhengwen",
+    "email": "yuzhengwen0217@gmail.com",
+    "url": "https://www.yuzhengwen.github.com"
+  },
+  "description": "A project containing various useful tools. \nIncludes: \nA basic singleplayer inventory with features such as:\n- Exposed interface for bulk adding/removing of items\n- drag and drop items around\n- allows setting max stack size for items\n\nA Hierarchal State Machine\n- Sample scene uses this to control player movement\n\n(WIP) A questing system \n- Uses the aforementioned inventory system\n\n(WIP) Shooting mechanics\n\nContains Sample Scene and Game Objects\n- Can modify to look different\nComes with a simple Player and Item Collector system"
+}

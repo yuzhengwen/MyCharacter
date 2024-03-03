@@ -265,8 +265,14 @@
       },
       "url": "https://packages.unity.com"
     },
-    "com.yuzhengwen.singleplayer_inventory": {
-      "version": "file:SinglePlayerInventory",
+    "com.yuzuval.hfsm": {
+      "version": "file:hfsm",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
+    "com.yuzuval.inventory_system": {
+      "version": "file:inventory_system",
       "depth": 0,
       "source": "embedded",
       "dependencies": {}

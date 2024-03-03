@@ -1,0 +1,16 @@
+{
+    "name": "QuestingSystem",
+    "rootNamespace": "",
+    "references": [
+        "GUID:2b8b411630c27d04ab9f2d045f75163f"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
