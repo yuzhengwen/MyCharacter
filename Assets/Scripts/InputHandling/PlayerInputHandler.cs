@@ -1,16 +1,22 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.Windows;
 using YuzuValen;
+using static PlayerInputActions;
 
 [RequireComponent(typeof(PlayerMovement))]
-public class PlayerInputHandler : MonoBehaviour
+public class PlayerInputHandler : MonoBehaviour, IGameplayActions
 {
-    PlayerInputActions controls;
-    PlayerMovement playerMovement;
+    public PlayerInputActions controls;
+    private PlayerMovement playerMovement;
+
+    public float xInput;
+
     private void Awake()
     {
-         controls = new PlayerInputActions();
+        controls = new PlayerInputActions();
     }
     private void OnEnable()
     {
@@ -19,10 +25,38 @@ public class PlayerInputHandler : MonoBehaviour
     private void Start()
     {
         playerMovement = GetComponent<PlayerMovement>();
-        controls.Gameplay.SetCallbacks(playerMovement);
+        controls.Gameplay.SetCallbacks(this);
     }
     private void OnDisable()
     {
         controls.Disable();
+    }
+
+    public void OnMove(InputAction.CallbackContext context)
+    {
+        xInput = context.ReadValue<float>();
+        if (context.phase == InputActionPhase.Canceled)
+        {
+            playerMovement.fsm.TriggerEvent("XMoveInputReleased", context.ReadValue<float>());
+            return;
+        }
+        playerMovement.fsm.TriggerEvent("XMoveInput", context.ReadValue<float>());
+    }
+
+    public void OnJump(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+            playerMovement.fsm.TriggerEvent("JumpInput");
+        }
+        if (context.canceled)
+        {
+            playerMovement.fsm.TriggerEvent("JumpInputReleased");
+        }
+    }
+
+    public void OnAttack1(InputAction.CallbackContext context)
+    {
+        Debug.Log("Input: Attack1");
     }
 }

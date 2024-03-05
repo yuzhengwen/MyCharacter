@@ -5,30 +5,30 @@ public class PlayerData : MonoBehaviour
 {
     public event Action<int, int> OnLevelUp;
 
-    public int level { get; private set; } = 1;
-    public int exp { get; private set; } = 0;
-    public int expToNextLevel { get; private set; }
+    public int Level { get; private set; } = 1;
+    public int Exp { get; private set; } = 0;
+    public int ExpToNextLevel { get; private set; } = 0;
 
     private void Start()
     {
-        expToNextLevel = GetExpToNextLevel(level);
+        ExpToNextLevel = GetExpToNextLevel(Level);
     }
 
     public void AddExp(int amount)
     {
-        exp += amount;
-        while (exp > expToNextLevel)
+        Exp += amount;
+        while (Exp > ExpToNextLevel)
         {
-            exp = exp - expToNextLevel;
+            Exp = Exp - ExpToNextLevel;
             LevelUp();
         }
     }
 
     private void LevelUp()
     {
-        OnLevelUp?.Invoke(level, level + 1);
-        level++;
-        expToNextLevel = GetExpToNextLevel(level);
+        OnLevelUp?.Invoke(Level, Level + 1);
+        Level++;
+        ExpToNextLevel = GetExpToNextLevel(Level);
     }
 
     private int GetExpToNextLevel(int level)

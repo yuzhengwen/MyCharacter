@@ -266,15 +266,15 @@
       "url": "https://packages.unity.com"
     },
     "com.yuzuval.hfsm": {
-      "version": "file:hfsm",
+      "version": "file:C:/Users/yuzhe/Desktop/Coding/Unity/MyPackages/hfsm",
       "depth": 0,
-      "source": "embedded",
+      "source": "local",
       "dependencies": {}
     },
     "com.yuzuval.inventory_system": {
-      "version": "file:inventory_system",
+      "version": "file:C:/Users/yuzhe/Desktop/Coding/Unity/MyPackages/inventory_system",
       "depth": 0,
-      "source": "embedded",
+      "source": "local",
       "dependencies": {}
     },
     "com.unity.modules.ai": {

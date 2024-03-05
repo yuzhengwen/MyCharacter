@@ -1,25 +1,36 @@
 ﻿using UnityEngine;
-using YuzuValen;
 using YuzuValen.HFSM;
 
-public class JumpState<TStateId> : BaseState<TStateId>
+namespace YuzuValen
 {
-    private PlayerMovement player;
-    private readonly Rigidbody2D rb;
+    public class JumpState : BasePlayerState
+    {
+        private Vector2 jumpForce = new(0, 12.0f);
+        private Vector2 fallingForce = new(0, -2.0f);
+        public JumpState(string id, PlayerMovement player) : base(id, player)
+        {
+        }
 
-    private Vector2 jumpForce = new(0, 12.0f);
-    private Vector2 fallingForce = new(0, -4.0f);
-    public JumpState(PlayerMovement player) : base()
-    {
-        this.player = player;
-        rb = player.GetComponent<Rigidbody2D>();
-    }
-    public override void OnEnter()
-    {
-        rb.AddForce(jumpForce, ForceMode2D.Impulse);
-    }
-    public override void OnExit()
-    {
-        rb.AddForce(fallingForce, ForceMode2D.Impulse);
+        public override void OnEnter()
+        {
+            rb.AddForce(jumpForce, ForceMode2D.Impulse);
+        }
+        public override void OnExit()
+        {
+            rb.gravityScale = 2.0f;
+            rb.AddForce(fallingForce, ForceMode2D.Impulse);
+        }
+        public override void Init()
+        {
+            parent.AddTransition(PlayerState.AirborneState.Jumping, PlayerState.AirborneState.Falling, () => rb.velocity.y < 0);
+        }
+        public override void TriggerEvent(string eventName, params object[] args)
+        {
+            // increase gravity if jump input is released early for a shorter jump
+            if (eventName == "JumpInputReleased")
+            {
+                rb.gravityScale = 4.0f;
+            }
+        }
     }
 }
