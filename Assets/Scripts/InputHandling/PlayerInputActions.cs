@@ -53,6 +53,24 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Attack 2"",
+                    ""type"": ""Button"",
+                    ""id"": ""e053f82f-ae5c-4561-b3b8-7a047deb07df"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Attack 3"",
+                    ""type"": ""Button"",
+                    ""id"": ""83080f3f-f2e9-4156-b369-4697c66843bc"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -110,6 +128,28 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""45a6b724-7ff0-43ba-bc5b-15ed2d83dfc2"",
+                    ""path"": ""<Keyboard>/2"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Attack 2"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9ac62ae9-2da4-42f7-a411-b39a0d047c29"",
+                    ""path"": ""<Keyboard>/3"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Attack 3"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -121,6 +161,8 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         m_Gameplay_Move = m_Gameplay.FindAction("Move", throwIfNotFound: true);
         m_Gameplay_Jump = m_Gameplay.FindAction("Jump", throwIfNotFound: true);
         m_Gameplay_Attack1 = m_Gameplay.FindAction("Attack 1", throwIfNotFound: true);
+        m_Gameplay_Attack2 = m_Gameplay.FindAction("Attack 2", throwIfNotFound: true);
+        m_Gameplay_Attack3 = m_Gameplay.FindAction("Attack 3", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -185,6 +227,8 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Gameplay_Move;
     private readonly InputAction m_Gameplay_Jump;
     private readonly InputAction m_Gameplay_Attack1;
+    private readonly InputAction m_Gameplay_Attack2;
+    private readonly InputAction m_Gameplay_Attack3;
     public struct GameplayActions
     {
         private @PlayerInputActions m_Wrapper;
@@ -192,6 +236,8 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         public InputAction @Move => m_Wrapper.m_Gameplay_Move;
         public InputAction @Jump => m_Wrapper.m_Gameplay_Jump;
         public InputAction @Attack1 => m_Wrapper.m_Gameplay_Attack1;
+        public InputAction @Attack2 => m_Wrapper.m_Gameplay_Attack2;
+        public InputAction @Attack3 => m_Wrapper.m_Gameplay_Attack3;
         public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -210,6 +256,12 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Attack1.started += instance.OnAttack1;
             @Attack1.performed += instance.OnAttack1;
             @Attack1.canceled += instance.OnAttack1;
+            @Attack2.started += instance.OnAttack2;
+            @Attack2.performed += instance.OnAttack2;
+            @Attack2.canceled += instance.OnAttack2;
+            @Attack3.started += instance.OnAttack3;
+            @Attack3.performed += instance.OnAttack3;
+            @Attack3.canceled += instance.OnAttack3;
         }
 
         private void UnregisterCallbacks(IGameplayActions instance)
@@ -223,6 +275,12 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Attack1.started -= instance.OnAttack1;
             @Attack1.performed -= instance.OnAttack1;
             @Attack1.canceled -= instance.OnAttack1;
+            @Attack2.started -= instance.OnAttack2;
+            @Attack2.performed -= instance.OnAttack2;
+            @Attack2.canceled -= instance.OnAttack2;
+            @Attack3.started -= instance.OnAttack3;
+            @Attack3.performed -= instance.OnAttack3;
+            @Attack3.canceled -= instance.OnAttack3;
         }
 
         public void RemoveCallbacks(IGameplayActions instance)
@@ -245,5 +303,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         void OnMove(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);
         void OnAttack1(InputAction.CallbackContext context);
+        void OnAttack2(InputAction.CallbackContext context);
+        void OnAttack3(InputAction.CallbackContext context);
     }
 }

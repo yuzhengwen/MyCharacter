@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Windows;
 using YuzuValen;
+using YuzuValen.AbilitySystem;
 using static PlayerInputActions;
 
 [RequireComponent(typeof(PlayerMovement))]
@@ -12,6 +13,7 @@ public class PlayerInputHandler : MonoBehaviour, IGameplayActions
 {
     public PlayerInputActions controls;
     private PlayerMovement playerMovement;
+    public AbilityController abilityController;
 
     public float xInput;
 
@@ -58,7 +60,26 @@ public class PlayerInputHandler : MonoBehaviour, IGameplayActions
 
     public void OnAttack1(InputAction.CallbackContext context)
     {
-        Debug.Log("Input: Attack1");
+        if (context.started)
+        {
+            abilityController.UseAbility(0);
+        }
+    }
+
+    public void OnAttack2(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+            abilityController.UseAbility(1);
+        }
+    }
+
+    public void OnAttack3(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+            abilityController.UseAbility(2);
+        }
     }
 }
 public class MoveEventArgs : EventArgs
