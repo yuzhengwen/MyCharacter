@@ -6,20 +6,20 @@ public class TutorialQuest : BaseQuest
 {
     public TutorialQuest(QuestManager questManager) : base(questManager)
     {
-        questName = "Tutorial Quest";
-        questId = 0;
+        name = "Tutorial Quest";
+        id = 0;
     }
     protected override void AddActions()
     {
-        requirements = new QuestAction[]
+        requirements = new BaseObjective[]
         {
-            //new PlayerLevelReached(questManager, 2),
-            new CollectItemAction(questManager, AllItems.allItems[AllItems.CRYSTAL], 1)
+            new PlayerLevelReached(this, questManager.playerStats, 2),
+            new CollectItemAction(this, questManager, ItemDB.GetItemData(ItemDB.CRYSTAL), 1)
         };
 
-        questSteps = new QuestAction[]
+        questSteps = new BaseObjective[]
         {
-            new CollectItemAction(questManager, AllItems.allItems[AllItems.CRYSTAL], 1)
+            new CollectItemAction(this, questManager, ItemDB.GetItemData(ItemDB.CRYSTAL), 1)
         };
 
         rewards = new QuestReward[]
@@ -29,9 +29,9 @@ public class TutorialQuest : BaseQuest
         };
     }
 
-    protected override void CompleteQuest()
+    public override void Complete()
     {
-        base.CompleteQuest();
+        base.Complete();
         Debug.Log("Tutorial Quest Complete");
     }
 }

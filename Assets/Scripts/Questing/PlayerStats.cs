@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-public class PlayerData : MonoBehaviour
+public class PlayerStats 
 {
     public event Action<int, int> OnLevelUp;
 
@@ -9,7 +9,7 @@ public class PlayerData : MonoBehaviour
     public int Exp { get; private set; } = 0;
     public int ExpToNextLevel { get; private set; } = 0;
 
-    private void Start()
+    public PlayerStats()
     {
         ExpToNextLevel = GetExpToNextLevel(Level);
     }
@@ -19,7 +19,7 @@ public class PlayerData : MonoBehaviour
         Exp += amount;
         while (Exp > ExpToNextLevel)
         {
-            Exp = Exp - ExpToNextLevel;
+            Exp -= ExpToNextLevel;
             LevelUp();
         }
     }
@@ -31,8 +31,8 @@ public class PlayerData : MonoBehaviour
         ExpToNextLevel = GetExpToNextLevel(Level);
     }
 
-    private int GetExpToNextLevel(int level)
+    private int GetExpToNextLevel(int cur)
     {
-        return 200 + level * 10;
+        return 200 + cur * 10;
     }
 }

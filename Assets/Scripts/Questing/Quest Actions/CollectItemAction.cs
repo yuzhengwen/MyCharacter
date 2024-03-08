@@ -1,6 +1,6 @@
 using System;
 
-public class CollectItemAction : QuestAction
+public class CollectItemAction : BaseObjective
 {
     private readonly ItemDataSO item;
     private readonly int amountToCollect;
@@ -8,10 +8,11 @@ public class CollectItemAction : QuestAction
 
     private int amountCollected;
 
-    public CollectItemAction(QuestManager qm, ItemDataSO item, int amountToCollect) : base(qm)
+    public CollectItemAction(BaseQuest parent, QuestManager qm, ItemDataSO item, int amountToCollect) : base(parent, "Collect Item")
     {
         this.item = item;
         this.amountToCollect = amountToCollect;
+        this.qm = qm;
     }
 
     private void CheckItem(ItemDataSO itemAdded, int amt)
@@ -27,7 +28,7 @@ public class CollectItemAction : QuestAction
     {
         qm.inventory.OnItemAdded += CheckItem;
     }
-    protected override void Complete()
+    public override void Complete()
     {
         base.Complete();
         qm.inventory.OnItemAdded -= CheckItem;

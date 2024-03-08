@@ -3,27 +3,28 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerLevelReached : QuestAction
+public class PlayerLevelReached : BaseObjective
 {
     private readonly int levelToReach;
-    private readonly QuestManager qm;
+    private readonly PlayerStats playerStats;
 
-    public PlayerLevelReached(QuestManager qm, int levelToReach) : base(qm)
+    public PlayerLevelReached(BaseQuest parent, PlayerStats playerStats, int levelToReach) : base(parent, "Reached Level")
     {
         this.levelToReach = levelToReach;
+        this.playerStats = playerStats;
     }
-    private void CheckLevel(int prev, int cur)
+    public void CheckLevel(int prev, int cur)
     {
         if (cur >= levelToReach)
             Complete();
     }
     public override void Start()
     {
-        qm.playerData.OnLevelUp += CheckLevel;
+        playerStats.OnLevelUp += CheckLevel;
     }
-    protected override void Complete()
+    public override void Complete()
     {
         base.Complete();
-        qm.playerData.OnLevelUp -= CheckLevel;
+        playerStats.OnLevelUp -= CheckLevel;
     }
 }

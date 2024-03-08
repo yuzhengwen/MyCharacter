@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -37,10 +38,10 @@ public class PlayerInputHandler : MonoBehaviour, IGameplayActions
         xInput = context.ReadValue<float>();
         if (context.phase == InputActionPhase.Canceled)
         {
-            playerMovement.fsm.TriggerEvent("XMoveInputReleased", context.ReadValue<float>());
+            playerMovement.fsm.TriggerEvent("XMoveInputReleased", new MoveEventArgs(xInput));
             return;
         }
-        playerMovement.fsm.TriggerEvent("XMoveInput", context.ReadValue<float>());
+        playerMovement.fsm.TriggerEvent("XMoveInput", new MoveEventArgs(xInput));
     }
 
     public void OnJump(InputAction.CallbackContext context)
@@ -58,5 +59,13 @@ public class PlayerInputHandler : MonoBehaviour, IGameplayActions
     public void OnAttack1(InputAction.CallbackContext context)
     {
         Debug.Log("Input: Attack1");
+    }
+}
+public class MoveEventArgs : EventArgs
+{
+    public float xInput;
+    public MoveEventArgs(float xInput)
+    {
+        this.xInput = xInput;
     }
 }

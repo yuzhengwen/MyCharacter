@@ -8,6 +8,6 @@ namespace YuzuValen
     public class SaveData
     {
         public List<InventorySlot> inventorySlots = new();
-        public PlayerData playerData;
+        public PlayerStats playerData;
     }
 }

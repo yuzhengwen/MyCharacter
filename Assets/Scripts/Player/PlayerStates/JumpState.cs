@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using YuzuValen.HFSM;
 
 namespace YuzuValen
@@ -24,7 +25,7 @@ namespace YuzuValen
         {
             parent.AddTransition(PlayerState.AirborneState.Jumping, PlayerState.AirborneState.Falling, () => rb.velocity.y < 0);
         }
-        public override void TriggerEvent(string eventName, params object[] args)
+        public override void TriggerEvent(string eventName, EventArgs args=null)
         {
             // increase gravity if jump input is released early for a shorter jump
             if (eventName == "JumpInputReleased")
