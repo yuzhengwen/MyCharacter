@@ -14,9 +14,13 @@ namespace YuzuValen
 
         public StateMachine<string> fsm;
         public StateMachine<string> airborneFSM, groundedFSM;
-        private PlayerInputHandler inputHandler;
+        public PlayerInputHandler inputHandler;
+        public int facingDirection = 1;
+        public float moveDir = 0;
 
+        public float baseMoveSpeed = 5f;
         public float moveSpeed = 5f;
+        public float speedMultiplier = 1f;
         void Start()
         {
             cl = GetComponent<BoxCollider2D>();
@@ -68,11 +72,17 @@ namespace YuzuValen
         {
             fsm.Update();
             Debug.Log(string.Join(",", fsm.GetAllCurrentStates()));
+            facingDirection = inputHandler.xInput == 0 ? facingDirection : Mathf.RoundToInt(inputHandler.xInput);
+            moveDir = inputHandler.xInput;
         }
         private void FixedUpdate()
         {
             fsm.FixedUpdate();
-            rb.velocity = new Vector2(inputHandler.xInput * moveSpeed, rb.velocity.y);
+            UpdateVelocity();
+        }
+        public void UpdateVelocity()
+        {
+            rb.velocity = new Vector2(moveDir * moveSpeed * speedMultiplier, rb.velocity.y);
         }
 
         private bool IsGrounded()

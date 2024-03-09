@@ -11,8 +11,16 @@ namespace YuzuValen.AbilitySystem
 
         public float cooldown = 0;
         public float cooldownTimer = 0;
+        public bool showCooldownTimer = true;
         public event Action OnCooldownStarted;
         public event Action OnCooldownFinished;
+
+        /// <summary>
+        /// Allows next ability to be used if true <br/>
+        /// If false, next ability will be queued and executed only when current ability allows exit <br/>
+        /// Can use animation event to set this to true again
+        /// </summary>
+        public bool canExit = true;
 
         private void Update()
         {
@@ -25,7 +33,9 @@ namespace YuzuValen.AbilitySystem
                     cooldownTimer = 0;
                 }
             }
+            AbilityUpdate();
         }
+        protected virtual void AbilityUpdate() { }
         public void GoOnCooldown()
         {
             cooldownTimer = cooldown;

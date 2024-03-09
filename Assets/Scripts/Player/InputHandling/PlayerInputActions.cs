@@ -71,6 +71,24 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SwordAttack"",
+                    ""type"": ""Button"",
+                    ""id"": ""0789882e-3aa2-4b6f-80b0-804db4369f54"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Dash"",
+                    ""type"": ""Button"",
+                    ""id"": ""2a08cbea-6f69-4f1b-8075-1d8466ddad04"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -150,6 +168,28 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""action"": ""Attack 3"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""dbcffd94-4dbb-47f3-aa4a-61b392549ec9"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwordAttack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""acf1d0d6-3f37-488f-8a6e-ecab0f8aa1d3"",
+                    ""path"": ""<Keyboard>/shift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Dash"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -163,6 +203,8 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         m_Gameplay_Attack1 = m_Gameplay.FindAction("Attack 1", throwIfNotFound: true);
         m_Gameplay_Attack2 = m_Gameplay.FindAction("Attack 2", throwIfNotFound: true);
         m_Gameplay_Attack3 = m_Gameplay.FindAction("Attack 3", throwIfNotFound: true);
+        m_Gameplay_SwordAttack = m_Gameplay.FindAction("SwordAttack", throwIfNotFound: true);
+        m_Gameplay_Dash = m_Gameplay.FindAction("Dash", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -229,6 +271,8 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Gameplay_Attack1;
     private readonly InputAction m_Gameplay_Attack2;
     private readonly InputAction m_Gameplay_Attack3;
+    private readonly InputAction m_Gameplay_SwordAttack;
+    private readonly InputAction m_Gameplay_Dash;
     public struct GameplayActions
     {
         private @PlayerInputActions m_Wrapper;
@@ -238,6 +282,8 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         public InputAction @Attack1 => m_Wrapper.m_Gameplay_Attack1;
         public InputAction @Attack2 => m_Wrapper.m_Gameplay_Attack2;
         public InputAction @Attack3 => m_Wrapper.m_Gameplay_Attack3;
+        public InputAction @SwordAttack => m_Wrapper.m_Gameplay_SwordAttack;
+        public InputAction @Dash => m_Wrapper.m_Gameplay_Dash;
         public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -262,6 +308,12 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Attack3.started += instance.OnAttack3;
             @Attack3.performed += instance.OnAttack3;
             @Attack3.canceled += instance.OnAttack3;
+            @SwordAttack.started += instance.OnSwordAttack;
+            @SwordAttack.performed += instance.OnSwordAttack;
+            @SwordAttack.canceled += instance.OnSwordAttack;
+            @Dash.started += instance.OnDash;
+            @Dash.performed += instance.OnDash;
+            @Dash.canceled += instance.OnDash;
         }
 
         private void UnregisterCallbacks(IGameplayActions instance)
@@ -281,6 +333,12 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Attack3.started -= instance.OnAttack3;
             @Attack3.performed -= instance.OnAttack3;
             @Attack3.canceled -= instance.OnAttack3;
+            @SwordAttack.started -= instance.OnSwordAttack;
+            @SwordAttack.performed -= instance.OnSwordAttack;
+            @SwordAttack.canceled -= instance.OnSwordAttack;
+            @Dash.started -= instance.OnDash;
+            @Dash.performed -= instance.OnDash;
+            @Dash.canceled -= instance.OnDash;
         }
 
         public void RemoveCallbacks(IGameplayActions instance)
@@ -305,5 +363,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         void OnAttack1(InputAction.CallbackContext context);
         void OnAttack2(InputAction.CallbackContext context);
         void OnAttack3(InputAction.CallbackContext context);
+        void OnSwordAttack(InputAction.CallbackContext context);
+        void OnDash(InputAction.CallbackContext context);
     }
 }

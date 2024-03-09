@@ -13,16 +13,14 @@ namespace YuzuValen.AbilitySystem
 
         private Image icon;
         private TextMeshProUGUI cdText;
-        public Material mat;
         private AbilityController controller;
 
         private void Awake()
         {
             icon = transform.Find("Icon").GetComponent<Image>();
-            cdText = GetComponentInChildren<TextMeshProUGUI>(); 
+            cdText = GetComponentInChildren<TextMeshProUGUI>();
             // Create a new material instance to change the saturation of the icon
-            mat = Instantiate(icon.material);
-            icon.material = mat;
+            icon.material = Instantiate(icon.material);
         }
 
         public void AssignAbility(AbilityController controller, BaseAbility ability)
@@ -45,16 +43,17 @@ namespace YuzuValen.AbilitySystem
 
         private void UpdateCooldown()
         {
-            cdText.text = Mathf.CeilToInt(ability.cooldownTimer).ToString();
+            if (ability.showCooldownTimer)
+                cdText.text = Mathf.CeilToInt(ability.cooldownTimer).ToString();
         }
         private void OnCooldownStarted()
         {
-            mat.SetFloat("_Saturation", 0);
+            icon.material.SetFloat("_Saturation", 0);
         }
         private void OnCooldownFinished()
         {
             cdText.text = "";
-            mat.SetFloat("_Saturation", 1);
+            icon.material.SetFloat("_Saturation", 1);
         }
 
         public void OnPointerClick(PointerEventData eventData)

@@ -15,7 +15,7 @@ public class PlayerInputHandler : MonoBehaviour, IGameplayActions
     private PlayerMovement playerMovement;
     public AbilityController abilityController;
 
-    public float xInput;
+    public float xInput = 0;
 
     private void Awake()
     {
@@ -58,35 +58,47 @@ public class PlayerInputHandler : MonoBehaviour, IGameplayActions
         }
     }
 
-    public void OnAttack1(InputAction.CallbackContext context)
+    public void OnSwordAttack(InputAction.CallbackContext context)
     {
         if (context.started)
         {
             abilityController.UseAbility(0);
         }
     }
-
-    public void OnAttack2(InputAction.CallbackContext context)
+    public void OnDash(InputAction.CallbackContext context)
     {
         if (context.started)
         {
             abilityController.UseAbility(1);
         }
     }
-
-    public void OnAttack3(InputAction.CallbackContext context)
+    public void OnAttack1(InputAction.CallbackContext context)
     {
         if (context.started)
         {
             abilityController.UseAbility(2);
         }
     }
-}
-public class MoveEventArgs : EventArgs
-{
-    public float xInput;
-    public MoveEventArgs(float xInput)
+    public void OnAttack2(InputAction.CallbackContext context)
     {
-        this.xInput = xInput;
+        if (context.started)
+        {
+            abilityController.UseAbility(3);
+        }
+    }
+    public void OnAttack3(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+            abilityController.UseAbility(4);
+        }
+    }
+    public class MoveEventArgs : EventArgs
+    {
+        public float xInput;
+        public MoveEventArgs(float xInput)
+        {
+            this.xInput = xInput;
+        }
     }
 }
