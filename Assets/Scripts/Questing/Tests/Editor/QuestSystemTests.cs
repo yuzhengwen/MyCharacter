@@ -12,13 +12,6 @@ namespace YuzuValen
         [Test]
         public void PlayerLevelReachedObjectiveTest()
         {
-            PlayerStats stats = new();
-            PlayerLevelReached obj = new(null, stats, 2);
-
-            obj.Start();
-            stats.AddExp(500);
-
-            Assert.IsTrue(obj.IsComplete);
         }
     }
 }

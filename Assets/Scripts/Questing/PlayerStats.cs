@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-public class PlayerStats 
+public class PlayerStats : MonoBehaviour
 {
     public event Action<int, int> OnLevelUp;
 

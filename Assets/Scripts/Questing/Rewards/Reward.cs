@@ -2,13 +2,13 @@
 using UnityEngine;
 
 [Serializable]
-public struct QuestReward
+public struct Reward
 {
     public RewardType rewardType;
     public int amount;
     public ItemDataSO itemData;
 
-    public QuestReward(RewardType rewardType, int amount, ItemDataSO itemData = null)
+    public Reward(RewardType rewardType, int amount, ItemDataSO itemData = null)
     {
         this.rewardType = rewardType;
         this.amount = amount;

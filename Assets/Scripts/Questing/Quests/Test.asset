@@ -1,0 +1,53 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 23c32a1916948434e91abe12af81f9e4, type: 3}
+  m_Name: Test
+  m_EditorClassIdentifier: 
+  questName: Crystal Forging
+  id: 0
+  requirements:
+  - rid: 432928749932511235
+  questSteps:
+  - rid: 432928749932511234
+  - rid: 432928749932511239
+  rewards:
+  - rewardType: 0
+    amount: 10
+    itemData: {fileID: 0}
+  - rewardType: 1
+    amount: 200
+    itemData: {fileID: 0}
+  autoStart: 1
+  currentState: 0
+  references:
+    version: 2
+    RefIds:
+    - rid: 432928749932511234
+      type: {class: CounterObjective, ns: , asm: QuestingSystem}
+      data:
+        objectiveName: Collect 10 Crystals
+        currentState: 0
+        messageToReceive: CrystalCollected
+        targetCount: 10
+        incrementAmount: 1
+    - rid: 432928749932511235
+      type: {class: TalkToNPCObjective, ns: , asm: QuestingSystem}
+      data:
+        objectiveName: Learn About Crystal Forging
+        currentState: 0
+        npc: {fileID: 2132604626660768574, guid: f057e14bc9310e242a071b054f246184, type: 3}
+    - rid: 432928749932511239
+      type: {class: MessageObjective, ns: , asm: QuestingSystem}
+      data:
+        objectiveName: Interact with Forge
+        currentState: 0
+        messageToReceive: InteractWithForge
