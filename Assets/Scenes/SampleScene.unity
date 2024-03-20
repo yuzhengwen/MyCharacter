@@ -3124,6 +3124,7 @@ GameObject:
   - component: {fileID: 1553444710}
   - component: {fileID: 1553444709}
   - component: {fileID: 1553444708}
+  - component: {fileID: 1553444711}
   m_Layer: 0
   m_Name: QuestManager
   m_TagString: Untagged
@@ -3157,7 +3158,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd8ceb6b8a9b8fd44a7579aa9c5f50a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  quests: []
+  quests:
+  - {fileID: 11400000, guid: 22e2f7b31c7399546918b6cecb787e1e, type: 2}
+  - {fileID: 11400000, guid: f10f41df6bc974c45a89ed77536f7616, type: 2}
   rewardSystem: {fileID: 1553444708}
 --- !u!4 &1553444710
 Transform:
@@ -3174,6 +3177,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1553444711
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1553444707}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73b442066298fbf43a7e1f36b47be7d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inventory: {fileID: 4137624941987125952}
+  journal: {fileID: 1553444709}
 --- !u!1 &1721941762
 GameObject:
   m_ObjectHideFlags: 0
@@ -4603,7 +4620,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotsCount: 10
   items: []
-  startingInventory: {fileID: 11400000, guid: 0656c540c0c71ac4db716d6c85890a28, type: 2}
+  startingInventory: {fileID: 11400000, guid: 551f7ef6cc088f04dabc0fe962d4bfeb, type: 2}
 --- !u!114 &4164931427453266145
 MonoBehaviour:
   m_ObjectHideFlags: 0

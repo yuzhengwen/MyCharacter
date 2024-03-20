@@ -4,14 +4,14 @@ using UnityEngine;
 
 [Serializable]
 [CreateAssetMenu(fileName = "New Quest", menuName = "Quest System/Quest", order = 1)]
-public class Quest : ScriptableObject
+public class QuestData : ScriptableObject
 {
     #region Static Quest Info
     public string questName;
     public int id;
 
-    [SerializeReference, SubclassSelector] public Objective[] requirements;
-    [SerializeReference, SubclassSelector] public Objective[] questSteps;
+    [SerializeReference, SubclassSelector] public ObjectiveData[] requirements;
+    [SerializeReference, SubclassSelector] public ObjectiveData[] questSteps;
     public Reward[] rewards;
 
     public bool autoStart = false;
@@ -19,7 +19,7 @@ public class Quest : ScriptableObject
 
     private int curRequirementIndex = 0;
     private int curStepIndex = 0;
-    public Objective CurrentObj { get; protected set; }
+    public ObjectiveData CurrentObj { get; protected set; }
 
     #region Events
     /// <summary>
@@ -31,15 +31,32 @@ public class Quest : ScriptableObject
     /// Called after an objective is completed
     /// </summary>
     /// <inheritdoc/>
-    public event Action<Objective> OnProgressed;
+    public event Action<ObjectiveData> OnProgressed;
     /// <summary>
     /// Called after quest is entirely completed
     /// </summary>
     /// <inheritdoc/>
-    public event Action<Quest> OnComplete;
+    public event Action<QuestData> OnComplete;
     #endregion
 
     public QuestState currentState = QuestState.RequirementsNotMet;
+
+    /// <summary>
+    /// Resets the quest to its initial state
+    /// In future, this will be used to load quest from save data
+    /// </summary>
+    public void Init()
+    {
+        curRequirementIndex = 0;
+        curStepIndex = 0;
+        CurrentObj = requirements[curRequirementIndex];
+        currentState = QuestState.RequirementsNotMet;
+        foreach (ObjectiveData obj in requirements)
+            obj.Init();
+        foreach (ObjectiveData obj in questSteps)
+            obj.Init();
+        CurrentObj.Start(this);
+    }
 
     /// <summary>
     /// Called when quest is started
@@ -58,19 +75,19 @@ public class Quest : ScriptableObject
     /// <inheritdoc/>
     public virtual void Complete()
     {
-        currentState = QuestState.Completed;
+        SetState(QuestState.Completed);
         OnComplete?.Invoke(this);
     }
 
     #region Quest Objectives Progression
-    public void OnObjectiveCompleted(Objective completed)
+    public void OnObjectiveCompleted(ObjectiveData completed)
     {
         if (currentState == QuestState.RequirementsNotMet)
             ProgressRequirement(completed);
         else if (currentState == QuestState.InProgress)
             ProgressQuest(completed);
     }
-    protected virtual void ProgressRequirement(Objective completed)
+    protected virtual void ProgressRequirement(ObjectiveData completed)
     {
         if (completed != requirements[curRequirementIndex])
         {
@@ -79,17 +96,24 @@ public class Quest : ScriptableObject
         }
         OnProgressed?.Invoke(completed);
         curRequirementIndex++;
+        // check if no more requirements left
         if (curRequirementIndex >= requirements.Length)
+        {
             if (autoStart)
                 Start();
             else
-                currentState = QuestState.CanStart;
+                SetState(QuestState.CanStart);
+            return;
+        }
+        // progress to next requirement objective
+        CurrentObj = requirements[curRequirementIndex];
+        CurrentObj.Start(this);
     }
     /// <summary>
     /// Called when current step is completed. If there are no more steps, the quest is completed. Otherwise, the next step is started.
     /// </summary>
     /// <inheritdoc/>
-    protected virtual void ProgressQuest(Objective completed)
+    protected virtual void ProgressQuest(ObjectiveData completed)
     {
         if (completed != questSteps[curStepIndex])
         {
@@ -110,21 +134,33 @@ public class Quest : ScriptableObject
     }
     #endregion
 
+    /// <summary>
+    /// Messages will be sent to the current objective
+    /// </summary>
+    /// <param name="eventName"></param>
+    /// <param name="args"></param>
     public void TriggerEvent(string eventName, EventArgs args = null)
     {
-        if (currentState == QuestState.RequirementsNotMet)
-        {
-            IQuestEventResponder[] responders = Array.FindAll(requirements,
-                               (obj) => obj.currentState == ObjectiveState.InProgress && obj is IQuestEventResponder).Cast<IQuestEventResponder>().ToArray();
+        Debug.Log($"Event({eventName}) triggered on Quest: {questName}");
+        //if (currentState == QuestState.RequirementsNotMet)
+        //{
+        //    IQuestEventResponder[] responders = Array.FindAll(requirements,
+        //                       (obj) => obj.currentState == ObjectiveState.InProgress && obj is IQuestEventResponder).Cast<IQuestEventResponder>().ToArray();
 
-            foreach (IQuestEventResponder responder in responders)
-                responder.OnEventTrigger(eventName, args);
-        }
-        else if (currentState == QuestState.InProgress)
-        {
-            IQuestEventResponder responder = CurrentObj as IQuestEventResponder;
-            responder?.OnEventTrigger(eventName, args);
-        }
+        //    foreach (IQuestEventResponder responder in responders)
+        //        responder.OnEventTrigger(eventName, args);
+        //}
+        //else if (currentState == QuestState.InProgress)
+        //{
+        //    IQuestEventResponder responder = CurrentObj as IQuestEventResponder;
+        //    responder?.OnEventTrigger(eventName, args);
+        //}
+        (CurrentObj as IQuestEventResponder)?.OnEventTrigger(eventName, args);
+    }
+    public void SetState(QuestState state)
+    {
+        currentState = state;
+        OnStateChanged?.Invoke(state);
     }
 }
 public enum QuestState

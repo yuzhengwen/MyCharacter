@@ -13,13 +13,12 @@ namespace YuzuValen.AbilitySystem
         private Timer timer;
         private void Start()
         {
-            displayName = "Fire Ball";
+            displayName = "Dash";
             cooldown = 3;
             timer = new();
         }
         public override void Use(AbilityController control)
         {
-            Debug.Log("Dash");
             player = control.GetComponentInParent<PlayerMovement>();
             DashStart(player);
         }
@@ -37,7 +36,6 @@ namespace YuzuValen.AbilitySystem
         }
         protected override void AbilityUpdate()
         {
-            Debug.Log($"DELTA: {Time.deltaTime}, TIMER: {timer.GetTimeElapsed()}: Cancel dash - {timer.GetTimeElapsed() >= dashDuration}, Dash DUr: {dashDuration}");
             if (dashing && timer.GetTimeElapsed() >= dashDuration)
             {
                 DashEnd(player);

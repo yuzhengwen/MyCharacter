@@ -1,0 +1,50 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 23c32a1916948434e91abe12af81f9e4, type: 3}
+  m_Name: CollectItems
+  m_EditorClassIdentifier: 
+  questName: Collect Items
+  id: 0
+  requirements:
+  - rid: 432928770151153664
+  questSteps:
+  - rid: 432928770151153665
+  - rid: 432928770151153667
+  rewards:
+  - rewardType: 1
+    amount: 100
+    itemData: {fileID: 0}
+  autoStart: 1
+  currentState: 3
+  references:
+    version: 2
+    RefIds:
+    - rid: 432928770151153664
+      type: {class: MessageObjective, ns: , asm: QuestingSystem}
+      data:
+        objectiveName: Collect 1 Coin
+        currentState: 2
+        messageToReceive: CoinCollected
+    - rid: 432928770151153665
+      type: {class: MessageObjective, ns: , asm: QuestingSystem}
+      data:
+        objectiveName: Collect 1 Crystal
+        currentState: 2
+        messageToReceive: CrystalCollected
+    - rid: 432928770151153667
+      type: {class: CounterObjective, ns: , asm: QuestingSystem}
+      data:
+        objectiveName: Collect 10 Coin
+        currentState: 2
+        messageToReceive: CoinCollected
+        targetCount: 10
+        incrementAmount: 1

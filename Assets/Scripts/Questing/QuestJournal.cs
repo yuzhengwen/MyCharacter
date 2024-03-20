@@ -5,23 +5,23 @@ using UnityEngine;
 
 public class QuestJournal : MonoBehaviour
 {
-    [SerializeField] private List<Quest> quests = new();
-
+    [SerializeField] private List<QuestData> quests = new();
     [SerializeField] private RewardSystem rewardSystem;
 
     private void Start()
     {
-        LinkQuestRewards();
+        InitializeQuests();
     }
-    private void LinkQuestRewards()
+    private void InitializeQuests()
     {
-        foreach (Quest quest in quests)
+        foreach (QuestData quest in quests)
         {
             quest.OnComplete += GiveRewards;
+            quest.Init();
         }
     }
 
-    private void GiveRewards(Quest quest)
+    private void GiveRewards(QuestData quest)
     {
         Reward[] rewards = quest.rewards;
         rewardSystem.GiveRewards(rewards);
@@ -36,7 +36,7 @@ public class QuestJournal : MonoBehaviour
     /// <param name="args">EventArgs for passing arguments</param>
     public void TriggerEvent(string eventName, EventArgs args = null)
     {
-        foreach (Quest quest in quests)
+        foreach (QuestData quest in quests)
         {
             quest.TriggerEvent(eventName, args);
         }
