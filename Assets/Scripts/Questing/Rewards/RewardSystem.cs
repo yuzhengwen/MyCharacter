@@ -19,7 +19,7 @@ public class RewardSystem : MonoBehaviour
                     playerStats.AddExp(reward.amount);
                     break;
                 case RewardType.Gold:
-                    inventory.AddItem(ItemDB.allItems[ItemDB.COIN], reward.amount);
+                    inventory.AddItem(ItemUtils.Instance.GetItemDataByName("Coin"), reward.amount);
                     break;
             }
         }
