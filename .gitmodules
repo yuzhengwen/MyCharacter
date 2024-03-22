@@ -1,0 +1,6 @@
+[submodule "Submodules/hfsm"]
+	path = Submodules/hfsm
+	url = https://github.com/yuzhengwen/hfsm.git
+[submodule "Submodules/Inventory"]
+	path = Submodules/Inventory
+	url = https://github.com/yuzhengwen/inventory_system.git
