@@ -7,7 +7,12 @@ namespace YuzuValen
 {
     public class SaveData
     {
-        public List<InventorySlot> inventorySlots = new();
-        public PlayerStats playerData;
+        public InventoryData inventoryData = new();
+        public PlayerData playerData = new();
+    }
+    public interface ISaveable
+    {
+        void Save(SaveData data);
+        void Load(SaveData data);
     }
 }

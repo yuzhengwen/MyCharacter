@@ -2,7 +2,7 @@ using InventorySystem;
 using System;
 using UnityEngine;
 
-public class QuestCollector : MonoBehaviour
+public class QuestInventoryTracker : MonoBehaviour
 {
     [SerializeField] private Inventory inventory;
     [SerializeField] private QuestJournal journal;
