@@ -4468,10 +4468,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ced28079485b7a44b0dfc402d8b2dd2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inventory: {fileID: 4137624941987125952}
-  uiInventories:
-  - {fileID: 225727005}
-  - {fileID: 791076499}
+  inventoryGroups:
+  - inventory: {fileID: 4137624941987125952}
+    acceptedTypes: 
+    acceptAllTypes: 1
+  uiGroups:
+  - uiInventory: {fileID: 225727005}
+    inventoryToAssign: {fileID: 4137624941987125952}
+    canToggle: 0
+    visibleOnOpen: 0
+    visibleOnClose: 0
+  - uiInventory: {fileID: 791076499}
+    inventoryToAssign: {fileID: 4137624941987125952}
+    canToggle: 1
+    visibleOnOpen: 1
+    visibleOnClose: 0
+  toggleInventoryAction:
+    m_Name: Toggle Inventory
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: b5514be0-8167-4adb-9168-daf17940e8e2
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
 --- !u!1 &2752294345750787037
 GameObject:
   m_ObjectHideFlags: 0
@@ -4580,7 +4600,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 265e3d46f1493d24fa39bc8eab102997, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  slotsCount: 10
+  slotsCount: 20
   items: []
   startingInventory: {fileID: 11400000, guid: 551f7ef6cc088f04dabc0fe962d4bfeb, type: 2}
 --- !u!120 &4173939012199154222
