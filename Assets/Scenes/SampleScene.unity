@@ -2902,6 +2902,60 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2b0c49e392e154745be7d56721af9f0d, type: 3}
+--- !u!1 &1289143341
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1289143343}
+  - component: {fileID: 1289143342}
+  m_Layer: 0
+  m_Name: StoryManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1289143342
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1289143341}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6971d84a935619344b3829f7ebb16175, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  storyGroups:
+  - title: 'Part 1: Something Amiss'
+    description: 
+    nodes:
+    - title: Saving the Town
+      description: 
+      part: 1
+      index: 1
+      mainQuests:
+      - {fileID: 11400000, guid: f10f41df6bc974c45a89ed77536f7616, type: 2}
+--- !u!4 &1289143343
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1289143341}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 960, y: 540, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1294955396
 GameObject:
   m_ObjectHideFlags: 0
@@ -4600,9 +4654,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 265e3d46f1493d24fa39bc8eab102997, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  startingInventory: {fileID: 0}
   slotsCount: 20
   items: []
-  startingInventory: {fileID: 11400000, guid: 551f7ef6cc088f04dabc0fe962d4bfeb, type: 2}
+  keys: []
+  values: 
 --- !u!120 &4173939012199154222
 LineRenderer:
   serializedVersion: 2
@@ -5090,3 +5146,4 @@ SceneRoots:
   - {fileID: 889596257}
   - {fileID: 463427876}
   - {fileID: 2014240096}
+  - {fileID: 1289143343}

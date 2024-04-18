@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using static QuestInventoryTracker;
 
 [Serializable]
 public abstract class ObjectiveData
@@ -33,9 +34,9 @@ public abstract class ObjectiveData
     /// <inheritdoc/>
     public virtual void Complete()
     {
+        Debug.Log($"Objective Complete: {objectiveName}");
         currentState = ObjectiveState.Completed;
         parent.OnObjectiveCompleted(this);
-        Debug.Log($"{objectiveName} completed");
     }
 }
 public enum ObjectiveState
@@ -65,7 +66,6 @@ public class MessageObjective : ObjectiveData, IQuestEventResponder
 public class CounterObjective : MessageObjective
 {
     [SerializeField] private int targetCount = 1;
-    [SerializeField] private int incrementAmount = 1;
     private int currentCount = 0;
 
     public override void Start(QuestData parent)
@@ -75,11 +75,12 @@ public class CounterObjective : MessageObjective
     }
     protected override void MessageReceived(EventArgs args = null)
     {
-        Increment();
+        int amount = (args as IntEventArgs)?.value ?? 1;
+        Increment(amount);
     }
-    public void Increment()
+    public void Increment(int amount)
     {
-        currentCount += incrementAmount;
+        currentCount += amount;
         if (currentCount >= targetCount)
         {
             currentCount = targetCount;

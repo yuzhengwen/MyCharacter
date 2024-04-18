@@ -141,7 +141,6 @@ public class QuestData : ScriptableObject
     /// <param name="args"></param>
     public void TriggerEvent(string eventName, EventArgs args = null)
     {
-        Debug.Log($"Event({eventName}) triggered on Quest: {questName}");
         //if (currentState == QuestState.RequirementsNotMet)
         //{
         //    IQuestEventResponder[] responders = Array.FindAll(requirements,
