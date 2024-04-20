@@ -90,6 +90,12 @@ public partial class StoryManager : MonoBehaviour
         }
         CurrentNode = GetNode(StoryIndex.Zero);
     }
+    [ContextMenu("Log Story Progress")]
+    public void LogStoryProgress()
+    {
+        Debug.Log("Current Story Node: " + CurrentNode.title);
+        Debug.Log("Current Story Index: " + CurrentNode.index);
+    }
 
     public bool IsCompleted(StoryIndex index) => CurrentNode.index > index;
 }

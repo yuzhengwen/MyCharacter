@@ -850,6 +850,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 186550616}
   m_CullTransparentMesh: 1
+--- !u!212 &187437023 stripped
+SpriteRenderer:
+  m_CorrespondingSourceObject: {fileID: 9101161238164123792, guid: f057e14bc9310e242a071b054f246184, type: 3}
+  m_PrefabInstance: {fileID: 2479439845137083003}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &197028778
 GameObject:
   m_ObjectHideFlags: 0
@@ -3823,7 +3828,7 @@ MonoBehaviour:
   initialQuests:
   - {fileID: 11400000, guid: f10f41df6bc974c45a89ed77536f7616, type: 2}
   quests: []
-  mainStoryQuest:
+  currentStoryQuest:
     data: {fileID: 0}
     requirements: []
     questSteps: []
@@ -4500,6 +4505,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2132604626660768574, guid: f057e14bc9310e242a071b054f246184, type: 3}
+      propertyPath: state
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2132604626660768574, guid: f057e14bc9310e242a071b054f246184, type: 3}
+      propertyPath: indicator
+      value: 
+      objectReference: {fileID: 187437023}
     - target: {fileID: 2657645966234118073, guid: f057e14bc9310e242a071b054f246184, type: 3}
       propertyPath: m_LocalPosition.x
       value: -2.27
