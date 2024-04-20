@@ -4606,6 +4606,15 @@ MonoBehaviour:
       m_Action: Toggle Inventory
       m_Flags: 0
     m_Flags: 0
+  closeAction:
+    m_Name: Close
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 6cee4052-08a2-4cde-9a65-2f58c15a9c8e
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
 --- !u!1 &2752294345750787037
 GameObject:
   m_ObjectHideFlags: 0
