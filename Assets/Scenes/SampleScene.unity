@@ -4596,7 +4596,15 @@ MonoBehaviour:
     m_Id: b5514be0-8167-4adb-9168-daf17940e8e2
     m_Processors: 
     m_Interactions: 
-    m_SingletonActionBindings: []
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: a804b756-1d59-4c56-ad16-146a67a14d9e
+      m_Path: <Keyboard>/i
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Toggle Inventory
+      m_Flags: 0
     m_Flags: 0
 --- !u!1 &2752294345750787037
 GameObject:

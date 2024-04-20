@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.Collections;
 using UnityEngine;
+using YuzuValen.Utils;
 
 public class QuestJournal : MonoBehaviour
 {
@@ -10,7 +11,7 @@ public class QuestJournal : MonoBehaviour
     [SerializeField] private StoryManager storyManager;
 
     [SerializeField] private List<QuestData> initialQuests = new();
-    [SerializeField] private List<Quest> quests = new();
+    [ReadOnlyInspector][SerializeField] private List<Quest> quests = new();
 
     #region Main Story
     private StoryNode CurrentStory => storyManager.CurrentNode;
