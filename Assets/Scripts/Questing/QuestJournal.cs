@@ -1,29 +1,52 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Collections;
 using UnityEngine;
 
 public class QuestJournal : MonoBehaviour
 {
-    [SerializeField] private List<QuestData> quests = new();
     [SerializeField] private RewardSystem rewardSystem;
+    [SerializeField] private StoryManager storyManager;
+
+    [SerializeField] private List<QuestData> initialQuests = new();
+    [SerializeField] private List<Quest> quests = new();
+
+    #region Main Story
+    private StoryNode CurrentStory => storyManager.CurrentNode;
+    [SerializeField] private Quest currentStoryQuest;
+    #endregion
 
     private void Start()
     {
-        InitializeQuests();
-    }
-    private void InitializeQuests()
-    {
-        foreach (QuestData quest in quests)
+        // try to load quests from save data
+        // if no save data, start quests from scratch
+        CreateNewQuests();
+        foreach (var quest in quests)
         {
-            quest.OnComplete += GiveRewards;
-            quest.Init();
+            StartQuest(quest);
+        }
+        StartStory();
+    }
+
+    private void CreateNewQuests()
+    {
+        foreach (QuestData data in initialQuests)
+        {
+            quests.Add(new Quest(data));
         }
     }
 
-    private void GiveRewards(QuestData quest)
+    private Quest StartQuest(Quest quest)
     {
-        Reward[] rewards = quest.rewards;
+        quest.OnComplete += GiveRewards;
+        quest.Init();
+        return quest;
+    }
+
+    private void GiveRewards(Quest quest)
+    {
+        Reward[] rewards = quest.data.rewards;
         rewardSystem.GiveRewards(rewards);
         quest.OnComplete -= GiveRewards;
     }
@@ -36,9 +59,45 @@ public class QuestJournal : MonoBehaviour
     /// <param name="args">EventArgs for passing arguments</param>
     public void TriggerEvent(string eventName, EventArgs args = null)
     {
-        foreach (QuestData quest in quests)
+        foreach (var quest in quests)
         {
             quest.TriggerEvent(eventName, args);
         }
+        currentStoryQuest.TriggerEvent(eventName, args);
+    }
+
+    private void StartStory()
+    {
+        currentStoryQuest = (new Quest(CurrentStory.Start()));
+        StartQuest(currentStoryQuest);
+        currentStoryQuest.OnComplete += ProgressStory;
+    }
+
+    private void ProgressStory(Quest quest)
+    {
+        Debug.Log($"Story Quest Complete: {quest.data.questName}");
+        quest.OnComplete -= ProgressStory;
+        var nextQuestData = CurrentStory.NextQuest(out bool isNodeComplete);
+        Debug.Log($"Node complete: {isNodeComplete}");
+        if (isNodeComplete)
+        {
+            storyManager.NextStoryNode(out bool isStoryComplete);
+            if (isStoryComplete)
+            {
+                Debug.Log("CONGRATS! Story Complete");
+                return;
+            }
+            StartStory();
+            return;
+        }
+        currentStoryQuest = StartQuest(new Quest(nextQuestData));
+        currentStoryQuest.OnComplete += ProgressStory;
+    }
+
+    [ContextMenu("Reset Story")]
+    private void ResetStory()
+    {
+        storyManager.Reset();
+        StartStory();
     }
 }

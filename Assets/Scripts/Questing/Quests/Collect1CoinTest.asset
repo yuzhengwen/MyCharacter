@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 23c32a1916948434e91abe12af81f9e4, type: 3}
+  m_Name: Collect1CoinTest
+  m_EditorClassIdentifier: 
+  questName: Test Quest
+  id: 0
+  requirements: []
+  questSteps:
+  - rid: 13491456359006209
+  rewards: []
+  autoStart: 1
+  references:
+    version: 2
+    RefIds:
+    - rid: 13491456359006209
+      type: {class: CounterObjective, ns: , asm: QuestingSystem}
+      data:
+        objectiveName: Collect 1 Coin
+        currentState: 0
+        messageToReceive: CoinCollected
+        targetCount: 1

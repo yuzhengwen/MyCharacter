@@ -2931,16 +2931,46 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6971d84a935619344b3829f7ebb16175, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  storyGroups:
-  - title: 'Part 1: Something Amiss'
+  mainStory:
+  - title: The beginning
     description: 
     nodes:
-    - title: Saving the Town
+    - title: Tutorial
       description: 
-      part: 1
-      index: 1
-      mainQuests:
+      index:
+        part: 0
+        index: 0
+      mainQuestData:
+      - {fileID: 11400000, guid: 44933ee1d0997344ca3a8c0266c10c9b, type: 2}
+      - {fileID: 11400000, guid: 44933ee1d0997344ca3a8c0266c10c9b, type: 2}
+      state: 0
+    - title: Tutorial 2
+      description: 
+      index:
+        part: 0
+        index: 0
+      mainQuestData:
       - {fileID: 11400000, guid: f10f41df6bc974c45a89ed77536f7616, type: 2}
+      state: 0
+  - title: Fighting
+    description: 
+    nodes:
+    - title: Fighting 1
+      description: 
+      index:
+        part: 0
+        index: 0
+      mainQuestData:
+      - {fileID: 11400000, guid: 44933ee1d0997344ca3a8c0266c10c9b, type: 2}
+      state: 0
+  CurrentNode:
+    title: New Story Node
+    description: 
+    index:
+      part: 0
+      index: 0
+    mainQuestData: []
+    state: 0
 --- !u!4 &1289143343
 Transform:
   m_ObjectHideFlags: 0
@@ -3788,10 +3818,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd8ceb6b8a9b8fd44a7579aa9c5f50a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  quests:
-  - {fileID: 11400000, guid: 22e2f7b31c7399546918b6cecb787e1e, type: 2}
-  - {fileID: 11400000, guid: f10f41df6bc974c45a89ed77536f7616, type: 2}
   rewardSystem: {fileID: 1553444708}
+  storyManager: {fileID: 1289143342}
+  initialQuests:
+  - {fileID: 11400000, guid: f10f41df6bc974c45a89ed77536f7616, type: 2}
+  quests: []
+  mainStoryQuest:
+    data: {fileID: 0}
+    requirements: []
+    questSteps: []
+    currentState: 0
+  references:
+    version: 2
+    RefIds: []
 --- !u!4 &1553444710
 Transform:
   m_ObjectHideFlags: 0
@@ -5141,9 +5180,9 @@ SceneRoots:
   - {fileID: 409500144}
   - {fileID: 1946854347}
   - {fileID: 773903451}
-  - {fileID: 1553444710}
   - {fileID: 2479439845137083003}
   - {fileID: 889596257}
   - {fileID: 463427876}
   - {fileID: 2014240096}
+  - {fileID: 1553444710}
   - {fileID: 1289143343}

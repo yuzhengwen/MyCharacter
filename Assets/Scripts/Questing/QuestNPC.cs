@@ -49,7 +49,7 @@ public class QuestNPC : MonoBehaviour
 
     public void CompleteObjective()
     {
-        obj.Complete();
+        obj.TalkedToNPC();
         SetState(QuestNPCState.Completed);
     }
 }
