@@ -23,20 +23,28 @@ public class QuestJournal : MonoBehaviour
     {
         // try to load quests from save data
         // if no save data, start quests from scratch
-        CreateNewQuests();
+        quests = CreateNewQuests(initialQuests);
         foreach (var quest in quests)
         {
             StartQuest(quest);
         }
         StartStory();
     }
-
-    private void CreateNewQuests()
+    public void LoadFromSave(StoryNodeGroup[] mainStory, StoryNode currentNode, Quest[] quests)
     {
-        foreach (QuestData data in initialQuests)
+        storyManager.mainStory = mainStory;
+        storyManager.CurrentNode = currentNode;
+        this.quests = quests.ToList();
+    }
+
+    private List<Quest> CreateNewQuests(List<QuestData> datas)
+    {
+        List<Quest> quests = new();
+        for (int i = 0; i < datas.Count; i++)
         {
-            quests.Add(new Quest(data));
+            quests.Add(new Quest(datas[i]));
         }
+        return quests;
     }
 
     private Quest StartQuest(Quest quest)
@@ -101,5 +109,14 @@ public class QuestJournal : MonoBehaviour
     {
         storyManager.Reset();
         StartStory();
+    }
+
+    public StoryManager GetStoryManager()
+    {
+        return storyManager;
+    }
+    public List<Quest> GetQuests()
+    {
+        return quests;
     }
 }

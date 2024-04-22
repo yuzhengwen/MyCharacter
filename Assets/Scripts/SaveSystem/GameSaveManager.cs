@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using YuzuValen.Utils;
 
 namespace YuzuValen
 {
@@ -13,9 +14,9 @@ namespace YuzuValen
         [SerializeField] private string fileName = "save";
         [SerializeField] private bool overwrite = false;
 
-        private ISaveable[] saveables;
+        [ReadOnlyInspector][SerializeField] private ISaveable[] saveables;
 
-        private SaveData saveData;
+        [ReadOnlyInspector][SerializeField] private SaveData saveData;
 
         private void Start()
         {

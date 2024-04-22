@@ -14,11 +14,11 @@ public partial class StoryManager : MonoBehaviour
 
     private void Awake()
     {
-        UpdateIndex(mainStory);
+        AutoSetIndexes(mainStory);
         CurrentNode = GetNode(StoryIndex.Zero);
     }
 
-    private void UpdateIndex(StoryNodeGroup[] mainStory)
+    private void AutoSetIndexes(StoryNodeGroup[] mainStory)
     {
         for (int i = 0; i < mainStory.Length; i++)
         {

@@ -3790,6 +3790,7 @@ GameObject:
   - component: {fileID: 1553444709}
   - component: {fileID: 1553444708}
   - component: {fileID: 1553444711}
+  - component: {fileID: 1553444712}
   m_Layer: 0
   m_Name: QuestManager
   m_TagString: Untagged
@@ -3865,6 +3866,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inventory: {fileID: 4137624941987125952}
   journal: {fileID: 1553444709}
+--- !u!114 &1553444712
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1553444707}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4f9cf2d04f1ab14c944e8a1c1d04be4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  questJournal: {fileID: 1553444709}
 --- !u!1001 &1783712850
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4175,7 +4189,30 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fileName: save
-  overwrite: 0
+  overwrite: 1
+  saveData:
+    inventoryData:
+      inventorySlots: []
+    playerData:
+      stats: {fileID: 0}
+      position: {x: 0, y: 0, z: 0}
+    questData:
+      quests: []
+      mainStory: []
+      CurrentNode:
+        title: New Story Node
+        description: 
+        index:
+          part: 0
+          index: 0
+        mainQuestData: []
+        state: 0
+    sceneDatas:
+      keys: []
+      values: []
+  references:
+    version: 2
+    RefIds: []
 --- !u!4 &2014240096
 Transform:
   m_ObjectHideFlags: 0
