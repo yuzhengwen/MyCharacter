@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using YuzuValen.Utils;
 
 public partial class StoryManager : MonoBehaviour
 {
@@ -10,7 +11,7 @@ public partial class StoryManager : MonoBehaviour
     public event Action<StoryNodeGroup> OnStoryGroupStart, OnStoryGroupComplete;
     public event Action OnStoryComplete;
 
-    public StoryNode CurrentNode;
+    [ReadOnlyInspector] public StoryNode CurrentNode;
 
     private void Awake()
     {
@@ -28,6 +29,12 @@ public partial class StoryManager : MonoBehaviour
             }
         }
     }
+    /// <summary>
+    /// Move to the next story node <br/>
+    /// If current node is last node of story group, move to the first node of the next story group
+    /// </summary>
+    /// <param name="isComplete">Whether the entire story is complete</param>
+    /// <returns></returns>
     internal StoryNode NextStoryNode(out bool isComplete)
     {
         OnStoryNodeComplete?.Invoke(CurrentNode);
@@ -49,20 +56,24 @@ public partial class StoryManager : MonoBehaviour
     }
     internal StoryIndex NextIndex(StoryIndex index, out bool isComplete)
     {
+        // if reached the end of the last part and last node
         if (index.part >= mainStory.Length - 1 && index.index >= mainStory[^1].nodes.Length - 1)
         {
             isComplete = true;
             return new StoryIndex(mainStory.Length - 1, mainStory[^1].nodes.Length - 1);
         }
         isComplete = false;
+        // go to next part if reached the end of the current part
         if (index.index >= mainStory[index.part].nodes.Length - 1)
         {
             return new StoryIndex(index.part + 1, 0);
         }
+        // go to next node in the current part
         if (index.index < mainStory[index.part].nodes.Length - 1)
         {
             return new StoryIndex(index.part, index.index + 1);
         }
+        // should never reach here
         return StoryIndex.Zero;
     }
     public StoryNode GetNode(StoryIndex index)

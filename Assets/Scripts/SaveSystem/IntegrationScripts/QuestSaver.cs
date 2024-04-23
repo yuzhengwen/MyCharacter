@@ -24,7 +24,7 @@ namespace YuzuValen
         public void Save(SaveData data)
         {
             var questData = data.questData;
-            questData.quests = questJournal.GetQuests().ToArray();
+            questData.quests = questJournal.GetAllQuests().ToArray();
             questData.mainStory = storyManager.mainStory;
             questData.CurrentNode = storyManager.CurrentNode;
         }

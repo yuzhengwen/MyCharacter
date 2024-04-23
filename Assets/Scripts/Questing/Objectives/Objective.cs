@@ -35,7 +35,6 @@ public abstract class Objective
     /// <inheritdoc/>
     protected virtual void Complete()
     {
-        Debug.Log($"Objective Complete: {objectiveName}");
         currentState = ObjectiveState.Completed;
         parent.OnObjectiveCompleted(this);
     }

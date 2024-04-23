@@ -11,14 +11,33 @@ public class QuestJournal : MonoBehaviour
     [SerializeField] private RewardSystem rewardSystem;
     [SerializeField] private StoryManager storyManager;
 
-    [SerializeField] private List<QuestData> initialQuests = new();
-    [ReadOnlyInspector][SerializeField] private List<Quest> quests = new();
-
     #region Main Story
     private StoryNode CurrentStory => storyManager.CurrentNode;
     [ReadOnlyInspector][SerializeField] private Quest currentStoryQuest;
     #endregion
 
+    #region Quests
+    [SerializeField] private List<QuestData> initialQuests = new();
+    [ReadOnlyInspector][SerializeField] private List<Quest> quests = new();
+    #endregion
+
+    private void OnEnable()
+    {
+        Quest.OnComplete += GiveRewards;
+        Quest.OnComplete += ProgressStory;
+        /*
+        Quest.OnProgressed += (q, o) => Debug.Log($"Quest Progressed: {q.data.questName} - {o.objectiveName}");
+        Quest.OnStateChanged += (q, s) => Debug.Log($"Quest State Changed: {q.data.questName} - {s}");
+        Quest.OnComplete += (q) => Debug.Log($"Quest Complete: {q.data.questName}");
+        */
+        storyManager.OnStoryComplete += ()=> Debug.Log("CONGRATS! STORY COMPLETED");
+        storyManager.OnStoryNodeComplete += (n) => Debug.Log($"Story Node Complete: {n.title}");
+    }
+    private void OnDisable()
+    {
+        Quest.OnComplete -= GiveRewards;
+        Quest.OnComplete -= ProgressStory;
+    }
     private void Start()
     {
         // try to load quests from save data
@@ -26,7 +45,7 @@ public class QuestJournal : MonoBehaviour
         quests = CreateNewQuests(initialQuests);
         foreach (var quest in quests)
         {
-            StartQuest(quest);
+            quest.Init();
         }
         StartStory();
     }
@@ -47,18 +66,10 @@ public class QuestJournal : MonoBehaviour
         return quests;
     }
 
-    private Quest StartQuest(Quest quest)
-    {
-        quest.OnComplete += GiveRewards;
-        quest.Init();
-        return quest;
-    }
-
     private void GiveRewards(Quest quest)
     {
         Reward[] rewards = quest.data.rewards;
         rewardSystem.GiveRewards(rewards);
-        quest.OnComplete -= GiveRewards;
     }
 
     /// <summary>
@@ -79,29 +90,25 @@ public class QuestJournal : MonoBehaviour
     private void StartStory()
     {
         currentStoryQuest = (new Quest(CurrentStory.Start()));
-        StartQuest(currentStoryQuest);
-        currentStoryQuest.OnComplete += ProgressStory;
+        currentStoryQuest.Init();
     }
 
     private void ProgressStory(Quest quest)
     {
-        Debug.Log($"Story Quest Complete: {quest.data.questName}");
-        quest.OnComplete -= ProgressStory;
+        if (quest != currentStoryQuest)
+            return;
+
         var nextQuestData = CurrentStory.NextQuest(out bool isNodeComplete);
-        Debug.Log($"Node complete: {isNodeComplete}");
         if (isNodeComplete)
         {
             storyManager.NextStoryNode(out bool isStoryComplete);
             if (isStoryComplete)
-            {
-                Debug.Log("CONGRATS! Story Complete");
                 return;
-            }
             StartStory();
             return;
         }
-        currentStoryQuest = StartQuest(new Quest(nextQuestData));
-        currentStoryQuest.OnComplete += ProgressStory;
+        currentStoryQuest = new Quest(nextQuestData);
+        currentStoryQuest.Init();
     }
 
     [ContextMenu("Reset Story")]
@@ -115,8 +122,16 @@ public class QuestJournal : MonoBehaviour
     {
         return storyManager;
     }
-    public List<Quest> GetQuests()
+    public List<Quest> GetAllQuests()
     {
         return quests;
+    }
+    public List<Quest> GetAllNotCompleted()
+    {
+        return quests.FindAll(q => q.currentState != QuestState.Completed);
+    }
+    public List<Quest> GetQuestByState(QuestState state)
+    {
+        return quests.FindAll(q => q.currentState == state);
     }
 }

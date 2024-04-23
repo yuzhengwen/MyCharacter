@@ -13,22 +13,22 @@ public class Quest
     private int curStepIndex = 0;
     public Objective CurrentObj { get; protected set; }
 
-    #region Events
+    #region Static Events
     /// <summary>
     /// Called when quest state changes <br/>
     /// E.g. From Unavailable to CanStart
     /// </summary>
-    public event Action<QuestState> OnStateChanged;
+    public static event Action<Quest, QuestState> OnStateChanged;
     /// <summary>
     /// Called after an objective is completed
     /// </summary>
     /// <inheritdoc/>
-    public event Action<Objective> OnProgressed;
+    public static event Action<Quest, Objective> OnProgressed;
     /// <summary>
     /// Called after quest is entirely completed
     /// </summary>
     /// <inheritdoc/>
-    public event Action<Quest> OnComplete;
+    public static event Action<Quest> OnComplete;
     #endregion
 
     public QuestState currentState = QuestState.RequirementsNotMet;
@@ -42,8 +42,9 @@ public class Quest
         questSteps = Array.ConvertAll(questSteps, (obj) => obj.DeepCopy(this));
     }
     /// <summary>
-    /// Resets the quest to its initial state
-    /// In future, this will be used to load quest from save data
+    /// Initialize quest <br/>
+    /// If there are requirements, quest will be in RequirementsNotMet state <br/>
+    /// If requirements are met, the quest will be in either CanStart or InProgress state (depending on autoStart)
     /// </summary>
     public void Init()
     {
@@ -64,7 +65,7 @@ public class Quest
     }
 
     /// <summary>
-    /// Called when quest is started
+    /// Called when quest is started (requirements are met)
     /// </summary>
     /// <inheritdoc/>
     public virtual void Start()
@@ -72,7 +73,6 @@ public class Quest
         currentState = QuestState.InProgress;
         CurrentObj = questSteps[curStepIndex];
         CurrentObj.Start(this);
-        UnityEngine.Debug.Log("Quest Started: " + data.name);
     }
     /// <summary>
     /// Called when quest is entirely completed
@@ -99,7 +99,7 @@ public class Quest
             UnityEngine.Debug.LogError($"Current Requirement is not {completed.objectiveName}");
             return;
         }
-        OnProgressed?.Invoke(completed);
+        OnProgressed?.Invoke(this, completed);
         curRequirementIndex++;
         // check if no more requirements left
         if (curRequirementIndex >= requirements.Length)
@@ -129,7 +129,7 @@ public class Quest
             UnityEngine.Debug.LogError($"Current step is not {completed.objectiveName}");
             return;
         }
-        OnProgressed?.Invoke(completed);
+        OnProgressed?.Invoke(this,completed);
         curStepIndex++;
         // check if no more steps left
         if (curStepIndex >= questSteps.Length)
@@ -155,6 +155,6 @@ public class Quest
     public void SetState(QuestState state)
     {
         currentState = state;
-        OnStateChanged?.Invoke(state);
+        OnStateChanged?.Invoke(this, state);
     }
 }

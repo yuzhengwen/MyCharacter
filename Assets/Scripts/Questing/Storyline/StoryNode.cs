@@ -14,6 +14,11 @@ public class StoryNode
 
     public NodeState state = NodeState.NotReached;
 
+    /// <summary>
+    /// Progresses the story node
+    /// </summary>
+    /// <param name="isComplete">Whether the entire story node is complete</param>
+    /// <returns>The next QuestData in story. null if node completed</returns>
     public QuestData NextQuest(out bool isComplete)
     {
         questIndex++;
@@ -26,6 +31,10 @@ public class StoryNode
         isComplete = false;
         return mainQuestData[questIndex];
     }
+    /// <summary>
+    /// Sets state to Active and index to 0
+    /// </summary>
+    /// <returns>QuestData for first quest in story node</returns>
     public QuestData Start()
     {
         questIndex = 0;
