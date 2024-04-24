@@ -7,6 +7,9 @@ namespace YuzuValen.Utils
     [System.Serializable]
     public class SerializableDictionary<TKey, TValue> : Dictionary<TKey, TValue>, ISerializationCallbackReceiver
     {
+        [Header("When ticked, List will not update from game")]
+        [SerializeField] private bool modify = false;
+        [Header("Dictionary Data")]
         [SerializeField]
         private List<TKey> keys = new List<TKey>();
 
@@ -15,25 +18,22 @@ namespace YuzuValen.Utils
 
         public void OnBeforeSerialize()
         {
-            keys.Clear();
-            values.Clear();
-            foreach (KeyValuePair<TKey, TValue> pair in this)
+            if (!modify)
             {
-                keys.Add(pair.Key);
-                values.Add(pair.Value);
+                keys.Clear();
+                values.Clear();
+                foreach (KeyValuePair<TKey, TValue> pair in this)
+                {
+                    keys.Add(pair.Key);
+                    values.Add(pair.Value);
+                }
             }
         }
 
         public void OnAfterDeserialize()
         {
             this.Clear();
-
-            if (keys.Count != values.Count)
-            {
-                throw new System.Exception("The number of keys and values does not match!");
-            }
-
-            for (int i = 0; i < keys.Count; i++)
+            for (int i = 0; i < Mathf.Min(keys.Count, values.Count); i++)
             {
                 this[keys[i]] = values[i];
             }
