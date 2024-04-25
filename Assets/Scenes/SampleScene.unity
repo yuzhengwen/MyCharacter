@@ -2938,16 +2938,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dict:
     modify: 0
-    keys:
-    - test
-    - re
-    - r
-    - hey
-    values:
-    - ah
-    - ree
-    - ree
-    - ete
+    keys: []
+    values: []
 --- !u!4 &1288256404
 Transform:
   m_ObjectHideFlags: 0
@@ -4843,7 +4835,7 @@ LineRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 2fb26cf900ea7494f93ad51734a84ccb, type: 2}
+  - {fileID: 2100000, guid: c2616bdb93d281f4eb6e9d8969d3cddd, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -4869,13 +4861,13 @@ LineRenderer:
   - {x: 0, y: 0, z: 1}
   m_Parameters:
     serializedVersion: 3
-    widthMultiplier: 1
+    widthMultiplier: 0.15
     widthCurve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
-        time: 0.007297516
-        value: 0.07692337
+        time: 0.15937042
+        value: 1
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -4916,10 +4908,10 @@ LineRenderer:
       m_NumColorKeys: 2
       m_NumAlphaKeys: 2
     numCornerVertices: 0
-    numCapVertices: 0
+    numCapVertices: 90
     alignment: 0
-    textureMode: 1
-    textureScale: {x: 0.1, y: 0.1}
+    textureMode: 2
+    textureScale: {x: 1, y: 1}
     shadowBias: 0.5
     generateLightingData: 0
   m_MaskInteraction: 0
@@ -5160,6 +5152,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e24476fda8991f541b6cad7fe8c4d316, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  startThrowStrength: 50
+  maxThrowStrength: 90
+  grenadeMass: 5
+  gravity: 9.81
 --- !u!50 &7143132167723148160
 Rigidbody2D:
   serializedVersion: 4
