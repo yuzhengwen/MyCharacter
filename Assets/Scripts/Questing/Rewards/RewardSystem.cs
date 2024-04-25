@@ -6,6 +6,9 @@ public class RewardSystem : MonoBehaviour
     [SerializeField] private PlayerStats playerStats;
     [SerializeField] private Inventory inventory;
 
+    [Header("Reward Items")]
+    [SerializeField] private ItemDataSO gold;
+
     public void GiveRewards(params Reward[] rewards)
     {
         foreach (var reward in rewards)
@@ -19,7 +22,7 @@ public class RewardSystem : MonoBehaviour
                     playerStats.AddExp(reward.amount);
                     break;
                 case RewardType.Gold:
-                    inventory.AddItem(ItemUtils.Instance.GetItemDataByName("Coin"), reward.amount);
+                    inventory.AddItem(gold, reward.amount);
                     break;
             }
         }
