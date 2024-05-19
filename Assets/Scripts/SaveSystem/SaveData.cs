@@ -12,7 +12,7 @@ namespace YuzuValen
         public InventoryData inventoryData = new();
         public PlayerData playerData = new();
         public QuestData questData = new();
-        public SerializableDictionary<string, SceneSaveData> sceneDatas = new();
+        public Dictionary<string, SceneSaveData> sceneDatas = new();
     }
     public interface ISaveable
     {
@@ -22,6 +22,6 @@ namespace YuzuValen
     [System.Serializable]
     public class SceneSaveData
     {
-        public SerializableDictionary<string, object> saveData = new();
+        public Dictionary<string, object> saveData = new();
     }
 }
