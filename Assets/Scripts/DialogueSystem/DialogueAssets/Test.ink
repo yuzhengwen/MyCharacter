@@ -1,8 +1,10 @@
-Hello my name in Joyce! #speaker:Joyce
+Hello! #speaker:Joyce
 Welcome to My Character :D 
+* [Who are you?]
+    I'm <color="blue"><b>Joyce</b></color>!
 * [Yay!]
     Yay!
-* [Hello!] 
-    Yes, hello!
-- Have a good day! #speaker:Player
+    
+-Have a good day! #speaker:Player
+You too! #speaker:Joyce
 -> END

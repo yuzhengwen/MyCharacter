@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Ink.Runtime;
 using System;
+using UnityEngine.InputSystem;
 
 namespace YuzuValen.DialogueSystem
 {
@@ -14,21 +15,57 @@ namespace YuzuValen.DialogueSystem
         public event Action OnDialogueBegin;
         public event Action OnDialogueExit;
 
-        [SerializeField] private Dialogue_UIController uiController;
+        [SerializeField] public Dialogue_UIController uiController;
 
         private const string SPEAKER_TAG = "speaker";
-        private List<SpeakerProfile> speakerProfiles = new();
+        private readonly List<SpeakerProfile> speakerProfiles = new();
 
-        [SerializeField] private SpeakerProfile playerProfile;
+        [SerializeField] private SpeakerProfile[] persistentProfiles;
 
+        [SerializeField] private InputAction continueAction;
+
+        private void OnEnable()
+        {
+            if (continueAction != null)
+            {
+                continueAction.Enable();
+                continueAction.performed += _ => OnContinueInput();
+            }
+        }
         private void Start()
         {
             IsPlaying = false;
-            speakerProfiles.Add(playerProfile);
         }
+        /// <summary>
+        /// Player input should trigger this method<br/>
+        /// Will finish typing if the UI is still typing<br/>
+        /// If there are choices, will not continue until a choice is made</br>
+        /// Otherwise, will continue the story
+        /// </summary>
+        public void OnContinueInput()
+        {
+            if (IsPlaying)
+            {
+                // if the UI is still typing, instantly finish typing
+                if (uiController.IsTyping) { SkipTyping(); return; }
+                // if there are choices, don't continue until a choice is made
+                if (story.currentChoices.Count > 0) return;
+                // otherwise, proceed with the story
+                ContinueStory();
+            }
+        }
+        /// <summary>
+        /// Begins a dialogue with the given inkJson file and speaker profiles<br/>
+        /// </summary>
+        /// <param name="inkJson"></param>
+        /// <param name="speakerProfiles"></param>
         public void BeginDialogue(TextAsset inkJson, params SpeakerProfile[] speakerProfiles)
         {
+            // load all the speakers in this dialogue
+            this.speakerProfiles.Clear();
+            this.speakerProfiles.AddRange(persistentProfiles);
             this.speakerProfiles.AddRange(speakerProfiles);
+
             OnDialogueBegin?.Invoke();
             story = new Story(inkJson.text);
             IsPlaying = true;
@@ -37,16 +74,15 @@ namespace YuzuValen.DialogueSystem
             ContinueStory();
         }
 
-        private void ExitDialogue()
+        /// <summary>
+        /// Exits the dialogue, hiding the UI and invoking the OnDialogueExit event
+        /// This is called by default when the story ends
+        /// </summary>
+        public void ExitDialogue()
         {
             IsPlaying = false;
             uiController.ShowPanel(false);
             OnDialogueExit?.Invoke();
-        }
-        private void Update()
-        {
-            if (IsPlaying && Input.GetKeyDown(KeyCode.F))
-                ContinueStory();
         }
         private void ContinueStory()
         {
@@ -62,7 +98,7 @@ namespace YuzuValen.DialogueSystem
             }
         }
 
-        private void HandleTags(List<string> currentTags)
+        protected virtual void HandleTags(List<string> currentTags)
         {
             foreach (string tag in currentTags)
             {
@@ -76,7 +112,7 @@ namespace YuzuValen.DialogueSystem
                         Debug.LogError($"Speaker {speaker} not found in speaker profiles");
                         return;
                     }
-                    uiController.SetSpeaker(speakerProfile);
+                    uiController.SetCurrentSpeaker(speakerProfile);
                 }
             }
         }
@@ -93,22 +129,31 @@ namespace YuzuValen.DialogueSystem
             uiController.SetChoices(choices, MakeChoice);
 
         }
-        public void MakeChoice(int index)
+        private void MakeChoice(int index)
         {
             story.ChooseChoiceIndex(index);
             ContinueStory();
         }
+        private void SkipTyping() { if (uiController.IsTyping) uiController.SkipTyping(); }
     }
     public interface IDialogueUIController
     {
         void ShowPanel(bool enable);
         void SetText(string dialogue);
-        void SetSpeaker(SpeakerProfile speakerProfile);
+        void SetCurrentSpeaker(SpeakerProfile speakerProfile);
         void SetChoices(string[] choices, Action<int> makeChoice);
+        void SkipTyping();
+    }
+    public interface IVisualNovelUIController : IDialogueUIController
+    {
+        void SetSpeaker(SpeakerProfile speaker1, SpeakerProfile speaker2);
+        void SetSpeaker1(SpeakerProfile speaker1);
+        void SetSpeaker2(SpeakerProfile speaker2);
     }
     [Serializable]
     public struct SpeakerProfile
     {
+        [Tooltip("Should match the speaker tag value in Ink")]
         public string name;
         public Sprite portrait;
     }
