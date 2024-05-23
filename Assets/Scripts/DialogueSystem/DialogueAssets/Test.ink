@@ -1,10 +1,18 @@
+VAR introductions = 0
+{introductions==0:-> intro | -> bye}
+
+== intro ==
 Hello! #speaker:Joyce
 Welcome to My Character :D 
 * [Who are you?]
     I'm <color="blue"><b>Joyce</b></color>!
+    ~ introductions = 1
 * [Yay!]
     Yay!
-    
+
 -Have a good day! #speaker:Player
-You too! #speaker:Joyce
+-> bye
+
+== bye ==
+Goodbye! #speaker:Joyce
 -> END

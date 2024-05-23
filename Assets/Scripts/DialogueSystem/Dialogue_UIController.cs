@@ -10,17 +10,17 @@ namespace YuzuValen.DialogueSystem
     public class Dialogue_UIController : MonoBehaviour, IDialogueUIController
     {
         [Header("Dialogue UI")]
-        [SerializeField] private GameObject dialoguePanel;
-        [SerializeField] private TextMeshProUGUI dialogueText;
-        [SerializeField] private SpeakerProfileDisplay[] speakerProfileDisplays;
+        [SerializeField] protected GameObject dialoguePanel;
+        [SerializeField] protected TextMeshProUGUI dialogueText;
+        [SerializeField] protected SpeakerProfileDisplay[] speakerProfileDisplays;
 
         [Header("Choice UI")]
-        [SerializeField] private GameObject choicePanel;
-        private Button[] choiceButtons;
-        private TextMeshProUGUI[] choiceTexts;
+        [SerializeField] protected GameObject choicePanel;
+        protected Button[] choiceButtons;
+        protected TextMeshProUGUI[] choiceTexts;
 
         [Header("Typing Parameters")]
-        [SerializeField] private float typingSpeed = 0.05f;
+        [SerializeField] protected float typingSpeed = 0.05f;
         private Coroutine TypingCoVar;
         public bool IsTyping => TypingCoVar != null;
 

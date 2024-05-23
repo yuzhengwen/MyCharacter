@@ -4,18 +4,20 @@ using UnityEngine;
 using Ink.Runtime;
 using System;
 using UnityEngine.InputSystem;
+using System.Linq;
 
 namespace YuzuValen.DialogueSystem
 {
     public class DialogueManager : MonoBehaviourSingleton<DialogueManager>
     {
-        private Story story;
-        public bool IsPlaying { get; private set; } = false;
+        public Story CurrentStory { get; protected set; }
+        public bool IsPlaying { get; protected set; } = false;
 
         public event Action OnDialogueBegin;
         public event Action OnDialogueExit;
 
         [SerializeField] public Dialogue_UIController uiController;
+        public readonly DialogueVariables dialogueVariables = new();
 
         private const string SPEAKER_TAG = "speaker";
         private readonly List<SpeakerProfile> speakerProfiles = new();
@@ -49,7 +51,7 @@ namespace YuzuValen.DialogueSystem
                 // if the UI is still typing, instantly finish typing
                 if (uiController.IsTyping) { SkipTyping(); return; }
                 // if there are choices, don't continue until a choice is made
-                if (story.currentChoices.Count > 0) return;
+                if (CurrentStory.currentChoices.Count > 0) return;
                 // otherwise, proceed with the story
                 ContinueStory();
             }
@@ -67,8 +69,13 @@ namespace YuzuValen.DialogueSystem
             this.speakerProfiles.AddRange(speakerProfiles);
 
             OnDialogueBegin?.Invoke();
-            story = new Story(inkJson.text);
+            CurrentStory = new Story(inkJson.text);
             IsPlaying = true;
+
+            // start listening for variable changes
+            dialogueVariables.StartListening(CurrentStory);
+            // update all variables in the story
+            dialogueVariables.UpdateStoryVariables(CurrentStory);
 
             uiController.ShowPanel(true);
             ContinueStory();
@@ -83,14 +90,17 @@ namespace YuzuValen.DialogueSystem
             IsPlaying = false;
             uiController.ShowPanel(false);
             OnDialogueExit?.Invoke();
+
+            // stop listening for variable changes
+            dialogueVariables.StopListening(CurrentStory);
         }
         private void ContinueStory()
         {
-            if (story.canContinue)
+            if (CurrentStory.canContinue)
             {
-                uiController.SetText(story.Continue()); // dequeues and returns the next line of text
+                uiController.SetText(CurrentStory.Continue()); // dequeues and returns the next line of text
                 CheckChoices();
-                HandleTags(story.currentTags);
+                HandleTags(CurrentStory.currentTags);
             }
             else
             {
@@ -119,19 +129,19 @@ namespace YuzuValen.DialogueSystem
 
         private void CheckChoices()
         {
-            if (story.currentChoices.Count <= 0) return;
+            if (CurrentStory.currentChoices.Count <= 0) return;
 
-            string[] choices = new string[story.currentChoices.Count];
-            for (int i = 0; i < story.currentChoices.Count; i++)
+            string[] choices = new string[CurrentStory.currentChoices.Count];
+            for (int i = 0; i < CurrentStory.currentChoices.Count; i++)
             {
-                choices[i] = story.currentChoices[i].text;
+                choices[i] = CurrentStory.currentChoices[i].text;
             }
             uiController.SetChoices(choices, MakeChoice);
 
         }
         private void MakeChoice(int index)
         {
-            story.ChooseChoiceIndex(index);
+            CurrentStory.ChooseChoiceIndex(index);
             ContinueStory();
         }
         private void SkipTyping() { if (uiController.IsTyping) uiController.SkipTyping(); }
@@ -156,5 +166,38 @@ namespace YuzuValen.DialogueSystem
         [Tooltip("Should match the speaker tag value in Ink")]
         public string name;
         public Sprite portrait;
+    }
+    public class DialogueVariables
+    {
+        public readonly Dictionary<string, Ink.Runtime.Object> variables = new();
+        public void StartListening(Story story)
+        {
+            story.variablesState.variableChangedEvent += ReadVariable;
+        }
+        public void StopListening(Story story)
+        {
+            story.variablesState.variableChangedEvent -= ReadVariable;
+        }
+        private void ReadVariable(string varName, Ink.Runtime.Object value)
+        {
+            if (variables.ContainsKey(varName) && variables[varName].GetType() != value.GetType())
+            {
+                Debug.LogError($"Variable {varName} already exists with type {variables[varName].GetType()}, but tried to set with type {value.GetType()}");
+                return;
+            }
+            variables[varName] = value;
+        }
+        public void UpdateStoryVariables(Story story)
+        {
+            List<string> keys = story.variablesState.ToList();
+            foreach (var key in keys)
+            {
+                if (variables.ContainsKey(key))
+                {
+                    var storedValue = variables[key];
+                    story.variablesState.SetGlobal(key, storedValue);
+                }
+            }
+        }
     }
 }
