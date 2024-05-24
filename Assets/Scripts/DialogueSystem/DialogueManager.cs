@@ -29,7 +29,7 @@ namespace YuzuValen.DialogueSystem
 
         [SerializeField] private InputAction continueAction;
 
-        private Action<Story> unbindFunctions;
+        private IDialogueFunctionBinder binder;
 
         private void OnEnable()
         {
@@ -62,11 +62,12 @@ namespace YuzuValen.DialogueSystem
             }
         }
         /// <summary>
-        /// Begins a dialogue with the given inkJson file and speaker profiles<br/>
+        /// Begins a dialogue with the given story (and profiles and external functions)<br/>
         /// </summary>
-        /// <param name="inkJson"></param>
-        /// <param name="speakerProfiles"></param>
-        public void BeginDialogue(Story story, SpeakerProfile[] speakerProfiles = null, Action<Story> bindFunctions = null, Action<Story> unbindFunctions = null)
+        /// <param name="story">Ink story object</param>
+        /// <param name="speakerProfiles">Adds speaker profiles available to use in ink story</param>
+        /// <param name="binder">For binding external functions to ink story</param>
+        public void BeginDialogue(Story story, SpeakerProfile[] speakerProfiles = null, IDialogueFunctionBinder binder = null)
         {
             CurrentStory = story;
             OnDialogueBegin?.Invoke(CurrentStory);
@@ -78,8 +79,9 @@ namespace YuzuValen.DialogueSystem
                 AddSpeakerProfiles(speakerProfiles);
             }
 
-            bindFunctions?.Invoke(CurrentStory);
-            this.unbindFunctions = unbindFunctions;
+            // bind external functions to the story
+            this.binder = binder;
+            binder?.BindFunctions(CurrentStory);
 
             // update all variables in the story (important to do this before displaying the first line)
             dialogueVariables.UpdateStoryVariables(CurrentStory);
@@ -102,7 +104,7 @@ namespace YuzuValen.DialogueSystem
         /// </summary>
         public void ExitDialogue()
         {
-            unbindFunctions?.Invoke(CurrentStory);
+            binder?.UnbindFunctions(CurrentStory);
             IsDialoguePlaying = false;
             uiController.ShowMainPanel(false);
             OnDialogueExit?.Invoke(CurrentStory);

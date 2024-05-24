@@ -10,7 +10,7 @@ namespace YuzuValen.DialogueSystem
     /// <summary>
     /// Attach this component to a GameObject to allow triggering dialogue with this game object<br/>
     /// </summary>
-    public class DialogueComponent : MonoBehaviour
+    public class DialogueComponent : MonoBehaviour, IDialogueFunctionBinder
     {
         [SerializeField] private TextAsset inkJson;
         private Story story;
@@ -25,7 +25,7 @@ namespace YuzuValen.DialogueSystem
                 triggerDialogue.performed += OnTriggerDialogueInput;
             }
         }
-        private void Start()
+        private void Awake()
         {
             story = new Story(inkJson.text);
         }
@@ -44,25 +44,30 @@ namespace YuzuValen.DialogueSystem
             // reset the story state, otherwise it will only play once
             // DialogueManager will handle persisting states
             story.ResetState();
-            DialogueManager.Instance.BeginDialogue(story, speakerProfiles, BindFunctions, UnbindFunctions);
+            DialogueManager.Instance.BeginDialogue(story, speakerProfiles, this);
         }
-        /// <summary>
-        /// This function is passed as an Action when dialogue is started and is called after Story Obj is created but before it is played<br/>
-        /// Useful for binding external functions to the story
-        /// </summary>
-        /// <param name="story">Current Story Object</param>
         public virtual void BindFunctions(Story story)
         {
             story.BindExternalFunction<string>("TestDebug", (string s) => Debug.Log(s));
         }
+        public virtual void UnbindFunctions(Story story)
+        {
+            story.UnbindExternalFunction("TestDebug");
+        }
+    }
+    public interface IDialogueFunctionBinder
+    {
+        /// <summary>
+        /// This function is called after Story Obj is created but before it is played<br/>
+        /// Useful for binding external functions to the story
+        /// </summary>
+        /// <param name="story">Current Story Object</param>
+        void BindFunctions(Story story);
         /// <summary>
         /// This function is called when dialogue is exited<br/>
         /// Useful for unbinding external functions from the story
         /// </summary>
         /// <param name="story"></param>
-        public virtual void UnbindFunctions(Story story)
-        {
-            story.UnbindExternalFunction("TestDebug");
-        }
+        void UnbindFunctions(Story story);
     }
 }
