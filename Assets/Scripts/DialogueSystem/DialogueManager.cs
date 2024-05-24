@@ -13,8 +13,8 @@ namespace YuzuValen.DialogueSystem
         public Story CurrentStory { get; protected set; }
         public bool IsDialoguePlaying { get; protected set; } = false;
 
-        public event Action OnDialogueBegin;
-        public event Action OnDialogueExit;
+        public event Action<Story> OnDialogueBegin;
+        public event Action<Story> OnDialogueExit;
 
         [SerializeField] public Dialogue_UIController uiController;
         /// <summary>
@@ -28,6 +28,8 @@ namespace YuzuValen.DialogueSystem
         [SerializeField] private SpeakerProfile[] persistentProfiles;
 
         [SerializeField] private InputAction continueAction;
+
+        private Action<Story> unbindFunctions;
 
         private void OnEnable()
         {
@@ -64,17 +66,20 @@ namespace YuzuValen.DialogueSystem
         /// </summary>
         /// <param name="inkJson"></param>
         /// <param name="speakerProfiles"></param>
-        public void BeginDialogue(TextAsset inkJson, SpeakerProfile[] speakerProfiles = null)
+        public void BeginDialogue(Story story, SpeakerProfile[] speakerProfiles = null, Action<Story> bindFunctions = null, Action<Story> unbindFunctions = null)
         {
+            CurrentStory = story;
+            OnDialogueBegin?.Invoke(CurrentStory);
+            IsDialoguePlaying = true;
+
             // load all the speakers in this dialogue
             if (speakerProfiles != null)
             {
                 AddSpeakerProfiles(speakerProfiles);
             }
 
-            OnDialogueBegin?.Invoke();
-            CurrentStory = new Story(inkJson.text);
-            IsDialoguePlaying = true;
+            bindFunctions?.Invoke(CurrentStory);
+            this.unbindFunctions = unbindFunctions;
 
             // update all variables in the story (important to do this before displaying the first line)
             dialogueVariables.UpdateStoryVariables(CurrentStory);
@@ -97,9 +102,10 @@ namespace YuzuValen.DialogueSystem
         /// </summary>
         public void ExitDialogue()
         {
+            unbindFunctions?.Invoke(CurrentStory);
             IsDialoguePlaying = false;
             uiController.ShowMainPanel(false);
-            OnDialogueExit?.Invoke();
+            OnDialogueExit?.Invoke(CurrentStory);
 
             // stop listening for variable changes
             dialogueVariables.StopListening(CurrentStory);
