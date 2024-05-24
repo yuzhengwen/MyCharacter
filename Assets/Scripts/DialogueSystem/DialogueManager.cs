@@ -11,12 +11,15 @@ namespace YuzuValen.DialogueSystem
     public class DialogueManager : MonoBehaviourSingleton<DialogueManager>
     {
         public Story CurrentStory { get; protected set; }
-        public bool IsPlaying { get; protected set; } = false;
+        public bool IsDialoguePlaying { get; protected set; } = false;
 
         public event Action OnDialogueBegin;
         public event Action OnDialogueExit;
 
         [SerializeField] public Dialogue_UIController uiController;
+        /// <summary>
+        /// object that stores all story variables, allows for setting and getting variables from the story
+        /// </summary>
         public readonly DialogueVariables dialogueVariables = new();
 
         private const string SPEAKER_TAG = "speaker";
@@ -36,7 +39,7 @@ namespace YuzuValen.DialogueSystem
         }
         private void Start()
         {
-            IsPlaying = false;
+            IsDialoguePlaying = false;
         }
         /// <summary>
         /// Player input should trigger this method<br/>
@@ -46,7 +49,7 @@ namespace YuzuValen.DialogueSystem
         /// </summary>
         public void OnContinueInput()
         {
-            if (IsPlaying)
+            if (IsDialoguePlaying)
             {
                 // if the UI is still typing, instantly finish typing
                 if (uiController.IsTyping) { SkipTyping(); return; }
@@ -71,7 +74,7 @@ namespace YuzuValen.DialogueSystem
 
             OnDialogueBegin?.Invoke();
             CurrentStory = new Story(inkJson.text);
-            IsPlaying = true;
+            IsDialoguePlaying = true;
 
             // update all variables in the story (important to do this before displaying the first line)
             dialogueVariables.UpdateStoryVariables(CurrentStory);
@@ -94,7 +97,7 @@ namespace YuzuValen.DialogueSystem
         /// </summary>
         public void ExitDialogue()
         {
-            IsPlaying = false;
+            IsDialoguePlaying = false;
             uiController.ShowMainPanel(false);
             OnDialogueExit?.Invoke();
 

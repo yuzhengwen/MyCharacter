@@ -10,7 +10,7 @@ namespace YuzuValen.DialogueSystem
         [SerializeField] private SpeakerProfile[] speakerProfiles;
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.E) && !DialogueManager.Instance.IsPlaying)
+            if (Input.GetKeyDown(KeyCode.E) && !DialogueManager.Instance.IsDialoguePlaying)
             {
                 TriggerDialogue();
             }
