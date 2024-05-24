@@ -31,16 +31,16 @@ namespace YuzuValen.DialogueSystem
             for (int i = 0; i < choiceButtons.Length; i++)
             {
                 int index = i; // to avoid referencing the same variable in the lambda
-                choiceButtons[i].onClick.AddListener(() => OnClickChoice(index));
+                choiceButtons[i].onClick.AddListener(() => OnSelectChoice(index));
                 choiceTexts[i] = choiceButtons[i].GetComponentInChildren<TextMeshProUGUI>();
             }
         }
         private void Start()
         {
-            dialoguePanel.SetActive(false);
+            ShowMainPanel(false);
             choicePanel.SetActive(false);
         }
-        public void ShowPanel(bool enable)
+        public void ShowMainPanel(bool enable)
         {
             dialoguePanel.SetActive(enable);
         }
@@ -86,9 +86,21 @@ namespace YuzuValen.DialogueSystem
             }
             dialogueText.maxVisibleCharacters = dialogueText.text.Length;
         }
+        /// <summary>
+        /// Sets the active speaker <br/>
+        /// Override this method to decide how to show active speaker in UI
+        /// </summary>
+        /// <param name="speakerProfile">Current Speaker</param>
         public virtual void SetCurrentSpeaker(SpeakerProfile speakerProfile){
             speakerProfileDisplays[0].SetSpeaker(speakerProfile);
         }
+        /// <summary>
+        /// Sets the speaker at the given index <br/>
+        /// Useful if using VN style UI with multiple speakers on screen <br/>
+        /// Override HandleTags method in DialogueManager to sync Ink tags with UI
+        /// </summary>
+        /// <param name="index"></param>
+        /// <param name="speakerProfile"></param>
         public virtual void SetSpeaker(int index, SpeakerProfile speakerProfile)
         {
             if (index >= speakerProfileDisplays.Length)
@@ -119,7 +131,12 @@ namespace YuzuValen.DialogueSystem
             DisplayChoices(choices);
         }
 
-        private void DisplayChoices(string[] choices)
+        /// <summary>
+        /// Displays the choices on the UI <br/>
+        /// Override this method to customize how the choices are displayed, animations, etc
+        /// </summary>
+        /// <param name="choices"></param>
+        protected virtual void DisplayChoices(string[] choices)
         {
             choicePanel.SetActive(true);
             // hide all choice buttons
@@ -131,7 +148,7 @@ namespace YuzuValen.DialogueSystem
                 choiceTexts[i].text = choices[i];
             }
         }
-        private void OnClickChoice(int index)
+        public void OnSelectChoice(int index)
         {
             makeChoice?.Invoke(index);
             choicePanel.SetActive(false);

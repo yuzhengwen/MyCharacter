@@ -41,7 +41,7 @@ namespace YuzuValen.DialogueSystem
         /// <summary>
         /// Player input should trigger this method<br/>
         /// Will finish typing if the UI is still typing<br/>
-        /// If there are choices, will not continue until a choice is made</br>
+        /// If there are choices, will not continue until a choice is made<br/>
         /// Otherwise, will continue the story
         /// </summary>
         public void OnContinueInput()
@@ -61,34 +61,41 @@ namespace YuzuValen.DialogueSystem
         /// </summary>
         /// <param name="inkJson"></param>
         /// <param name="speakerProfiles"></param>
-        public void BeginDialogue(TextAsset inkJson, params SpeakerProfile[] speakerProfiles)
+        public void BeginDialogue(TextAsset inkJson, SpeakerProfile[] speakerProfiles = null)
         {
             // load all the speakers in this dialogue
-            this.speakerProfiles.Clear();
-            this.speakerProfiles.AddRange(persistentProfiles);
-            this.speakerProfiles.AddRange(speakerProfiles);
+            if (speakerProfiles != null)
+            {
+                AddSpeakerProfiles(speakerProfiles);
+            }
 
             OnDialogueBegin?.Invoke();
             CurrentStory = new Story(inkJson.text);
             IsPlaying = true;
 
+            // update all variables in the story (important to do this before displaying the first line)
+            dialogueVariables.UpdateStoryVariables(CurrentStory);
             // start listening for variable changes
             dialogueVariables.StartListening(CurrentStory);
-            // update all variables in the story
-            dialogueVariables.UpdateStoryVariables(CurrentStory);
 
-            uiController.ShowPanel(true);
+            uiController.ShowMainPanel(true);
             ContinueStory();
+        }
+        public void AddSpeakerProfiles(SpeakerProfile[] speakerProfiles)
+        {
+            this.speakerProfiles.Clear();
+            this.speakerProfiles.AddRange(persistentProfiles);
+            this.speakerProfiles.AddRange(speakerProfiles);
         }
 
         /// <summary>
-        /// Exits the dialogue, hiding the UI and invoking the OnDialogueExit event
+        /// Exits the dialogue, hiding the UI and invoking the OnDialogueExit event <br/>
         /// This is called by default when the story ends
         /// </summary>
         public void ExitDialogue()
         {
             IsPlaying = false;
-            uiController.ShowPanel(false);
+            uiController.ShowMainPanel(false);
             OnDialogueExit?.Invoke();
 
             // stop listening for variable changes
@@ -116,7 +123,8 @@ namespace YuzuValen.DialogueSystem
                 if (tag.StartsWith(SPEAKER_TAG))
                 {
                     string speaker = tag.Split(':')[1];
-                    SpeakerProfile speakerProfile = speakerProfiles.Find(sp => sp.name == speaker);
+                    // find speaker by matching tag value with speakerId, allows for multiple speaker profiles with same name/portrait (e.g. same character with different expressions)
+                    SpeakerProfile speakerProfile = speakerProfiles.Find(sp => sp.speakerId == speaker);
                     if (speakerProfile.name == null)
                     {
                         Debug.LogError($"Speaker {speaker} not found in speaker profiles");
@@ -148,27 +156,27 @@ namespace YuzuValen.DialogueSystem
     }
     public interface IDialogueUIController
     {
-        void ShowPanel(bool enable);
+        void ShowMainPanel(bool enable);
         void SetText(string dialogue);
         void SetCurrentSpeaker(SpeakerProfile speakerProfile);
         void SetChoices(string[] choices, Action<int> makeChoice);
         void SkipTyping();
     }
-    public interface IVisualNovelUIController : IDialogueUIController
-    {
-        void SetSpeaker(SpeakerProfile speaker1, SpeakerProfile speaker2);
-        void SetSpeaker1(SpeakerProfile speaker1);
-        void SetSpeaker2(SpeakerProfile speaker2);
-    }
     [Serializable]
     public struct SpeakerProfile
     {
         [Tooltip("Should match the speaker tag value in Ink")]
+        public string speakerId;
         public string name;
         public Sprite portrait;
     }
     public class DialogueVariables
     {
+        /// <summary>
+        /// If a variable is changed in the story, it will be updated here <br/>
+        /// We can also set variables here, which will be reflected in the story <br/>
+        /// Updating variables while story is running may cause unexpected behavior
+        /// </summary>
         public readonly Dictionary<string, Ink.Runtime.Object> variables = new();
         public void StartListening(Story story)
         {

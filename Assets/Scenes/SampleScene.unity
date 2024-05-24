@@ -1638,6 +1638,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d2fc00fb2fa5a51428e4fd96de627e9a, type: 3}
+--- !u!114 &485148111 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3011487230773863918, guid: a75f94e142848814688feaa35404586a, type: 3}
+  m_PrefabInstance: {fileID: 348680318957150951}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &511973724 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 734606652555679891, guid: d2fc00fb2fa5a51428e4fd96de627e9a, type: 3}
@@ -2570,6 +2581,27 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uiController: {fileID: 981265152}
+  persistentProfiles:
+  - speakerId: Player
+    name: Player Display Name
+    portrait: {fileID: 21300000, guid: 530bcabb1501d8148a19a77465ecac03, type: 3}
+  continueAction:
+    m_Name: Continue
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 1cbbdb05-6c6f-433c-a161-12d48e34be91
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: bcc613c1-ca90-4791-b249-01fbf823cb99
+      m_Path: <Keyboard>/f
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Continue
+      m_Flags: 0
+    m_Flags: 0
 --- !u!4 &981265151
 Transform:
   m_ObjectHideFlags: 0
@@ -2598,9 +2630,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dialoguePanel: {fileID: 1474410295}
-  speakerText: {fileID: 1174756510}
   dialogueText: {fileID: 1486328584}
+  speakerProfileDisplays:
+  - speakerText: {fileID: 1174756510}
+    speakerPortrait: {fileID: 485148111}
   choicePanel: {fileID: 638641680}
+  typingSpeed: 0.05
 --- !u!1 &1037312164
 GameObject:
   m_ObjectHideFlags: 0
@@ -4285,6 +4320,30 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 234538085811847296, guid: a75f94e142848814688feaa35404586a, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 234538085811847296, guid: a75f94e142848814688feaa35404586a, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 234538085811847296, guid: a75f94e142848814688feaa35404586a, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 234538085811847296, guid: a75f94e142848814688feaa35404586a, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 234538085811847296, guid: a75f94e142848814688feaa35404586a, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 234538085811847296, guid: a75f94e142848814688feaa35404586a, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 259675560149491650, guid: a75f94e142848814688feaa35404586a, type: 3}
       propertyPath: m_Name
       value: DialogueCanvas
@@ -4295,14 +4354,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1927784579336671022, guid: a75f94e142848814688feaa35404586a, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2229291438732158694, guid: a75f94e142848814688feaa35404586a, type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2229291438732158694, guid: a75f94e142848814688feaa35404586a, type: 3}
-      propertyPath: m_AnchorMin.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2229291438732158694, guid: a75f94e142848814688feaa35404586a, type: 3}
@@ -4354,8 +4405,36 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5515525794316967453, guid: a75f94e142848814688feaa35404586a, type: 3}
-      propertyPath: m_HorizontalAlignment
+      propertyPath: m_fontSize
+      value: 18
+      objectReference: {fileID: 0}
+    - target: {fileID: 5515525794316967453, guid: a75f94e142848814688feaa35404586a, type: 3}
+      propertyPath: m_margin.w
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5515525794316967453, guid: a75f94e142848814688feaa35404586a, type: 3}
+      propertyPath: m_margin.x
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5515525794316967453, guid: a75f94e142848814688feaa35404586a, type: 3}
+      propertyPath: m_margin.y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5515525794316967453, guid: a75f94e142848814688feaa35404586a, type: 3}
+      propertyPath: m_margin.z
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5515525794316967453, guid: a75f94e142848814688feaa35404586a, type: 3}
+      propertyPath: m_fontSizeMax
+      value: 18
+      objectReference: {fileID: 0}
+    - target: {fileID: 5515525794316967453, guid: a75f94e142848814688feaa35404586a, type: 3}
+      propertyPath: m_fontSizeMin
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5515525794316967453, guid: a75f94e142848814688feaa35404586a, type: 3}
+      propertyPath: m_enableAutoSizing
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6336351788714673759, guid: a75f94e142848814688feaa35404586a, type: 3}
       propertyPath: m_AnchorMax.y
@@ -4370,6 +4449,42 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6336351788714673759, guid: a75f94e142848814688feaa35404586a, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7336155259320913497, guid: a75f94e142848814688feaa35404586a, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7336155259320913497, guid: a75f94e142848814688feaa35404586a, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7336155259320913497, guid: a75f94e142848814688feaa35404586a, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8943147315147658670, guid: a75f94e142848814688feaa35404586a, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8943147315147658670, guid: a75f94e142848814688feaa35404586a, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8943147315147658670, guid: a75f94e142848814688feaa35404586a, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8943147315147658670, guid: a75f94e142848814688feaa35404586a, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8943147315147658670, guid: a75f94e142848814688feaa35404586a, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8943147315147658670, guid: a75f94e142848814688feaa35404586a, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
@@ -4692,6 +4807,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inkJson: {fileID: 4900000, guid: dbb8789f33907ad4c91ef3ff94da982d, type: 3}
+  speakerProfiles:
+  - speakerId: Joyce
+    name: Joyce
+    portrait: {fileID: 21300000, guid: 2456dd2824f5ec540830760922f5bac6, type: 3}
 --- !u!114 &2610633018909545909
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5344,10 +5463,10 @@ SceneRoots:
   - {fileID: 409500144}
   - {fileID: 1946854347}
   - {fileID: 773903451}
-  - {fileID: 2479439845137083003}
   - {fileID: 889596257}
   - {fileID: 2014240096}
   - {fileID: 1553444710}
   - {fileID: 1289143343}
   - {fileID: 348680318957150951}
   - {fileID: 981265151}
+  - {fileID: 2479439845137083003}
