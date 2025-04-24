@@ -282,6 +282,14 @@
       "version": "file:../Submodules/Inventory",
       "depth": 0,
       "source": "local",
+      "dependencies": {
+        "com.yuzuval.utils": "https://github.com/yuzhengwen/yuzu-utils-unity"
+      }
+    },
+    "com.yuzuval.utils": {
+      "version": "file:C:/Users/YU/Desktop/Coding/Unity-Packages/Utils",
+      "depth": 0,
+      "source": "local",
       "dependencies": {}
     },
     "com.unity.modules.ai": {

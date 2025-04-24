@@ -4,6 +4,7 @@ using UnityEngine;
 using Ink.Runtime;
 using System;
 using UnityEngine.InputSystem;
+using YuzuValen.Utils;
 
 namespace YuzuValen.DialogueSystem
 {

@@ -2,7 +2,6 @@ using InventorySystem;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using YuzuValen.Utils;
 
 namespace YuzuValen
 {

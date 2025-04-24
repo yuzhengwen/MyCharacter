@@ -1,6 +1,6 @@
-﻿using YuzuValen.Utils;
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
+using YuzuValen.Utils;
 
 namespace YuzuValen.AbilitySystem
 {
@@ -15,7 +15,6 @@ namespace YuzuValen.AbilitySystem
         {
             displayName = "Dash";
             cooldown = 3;
-            timer = new();
         }
         public override void Use(AbilityController control)
         {
@@ -27,7 +26,6 @@ namespace YuzuValen.AbilitySystem
         {
             player.speedMultiplier = 2;
             dashing = true;
-            timer.Start();
         }
         private void DashEnd(PlayerMovement player)
         {
@@ -36,9 +34,15 @@ namespace YuzuValen.AbilitySystem
         }
         protected override void AbilityUpdate()
         {
-            if (dashing && timer.GetTimeElapsed() >= dashDuration)
+            if (dashing)
             {
-                DashEnd(player);
+                if (timer == null)
+                {
+                    timer = new Timer(dashDuration);
+                    timer.OnComplete += () => DashEnd(player);
+                    timer.Restart();
+                }
+                timer.Update();
             }
         }
         private void LateUpdate()
